@@ -3,9 +3,9 @@ const router = express.Router()
 const userController = require('../controllers/user-controller')
 const { apiErrorHandler } = require('../middleware/error-handler')
 const passport = require('../config/passport')
+const { authenticated, authenticatedAdmin } = require('../middleware/api-auth') 
 
 router.post('/users/register', userController.signUp)
-// router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn) 
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
 router.use('/', apiErrorHandler)
