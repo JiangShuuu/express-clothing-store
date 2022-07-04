@@ -6,7 +6,7 @@ const productController = {
       // 若沒raw會拿到sequelize物件
       raw: true
     })
-      .then(items => cb(null, { items }))
+      .then(products => cb(null, { products }))
       .catch(err => cb(err))
   },
   getProduct: (req, cb) => {
