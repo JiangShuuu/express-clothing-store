@@ -10,6 +10,7 @@ router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
 router.get('/products', productController.getProducts)
+router.post('/product', productController.postProduct)
 
 router.use('/', apiErrorHandler)
 
