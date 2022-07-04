@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express')
-// const methodOverride = require('method-override')
+const methodOverride = require('method-override')
 const app = express()
 const PORT = 3000
 const routes = require('./routes')
@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }))
+app.use(methodOverride('_method'))
 
 //app.use(passport.initialize()) // 初始化 Passport
 //app.use(passport.session()) // 啟動 session 功能

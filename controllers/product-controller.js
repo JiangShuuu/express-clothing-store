@@ -9,6 +9,15 @@ const productController = {
   },
   postProduct: (req, res, next) => {
     productServices.postProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  editProduct: (req, res, next) => {
+    productServices.editProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  putProduct: (req, res, next) => {
+    productServices.putProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  deleteProduct: (req, res, next) => {
+    productServices.deleteProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 

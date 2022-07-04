@@ -32,6 +32,30 @@ const productController = {
     })
       .then((newProduct) => cb(null, { product: newProduct }))
       .catch(err => next(err))
+  },
+  editProduct: (req, cb) => {
+    Product.findByPk(req.params.id, { 
+      raw: true 
+    })
+      .then(product => cb(null, { product }))
+      .catch(err => cb(err))
+  },
+  putProduct: (req, cb) => {
+    const { title, price, og_price, short_intro, description } = req.body
+    if (!title) throw new Error('Product title is required!')
+    Product.findByPk(req.params.id)
+      .then(product => {
+        if (!product) throw new Error("Product didn't exist!")
+        return product.update({
+          title,
+          price,
+          og_price,
+          short_intro,
+          description
+        })
+      })
+      .then((updateProduct) => cb(null, {product: updateProduct}))
+      .catch(err => cb(err))
   }
 }
 
