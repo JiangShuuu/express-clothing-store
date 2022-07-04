@@ -20,9 +20,6 @@ module.exports = {
       short_intro: {
         type: Sequelize.STRING
       },
-      is_open: {
-        type: Sequelize.BOOLEAN
-      },
       description: {
         type: Sequelize.STRING
       },

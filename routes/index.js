@@ -4,9 +4,12 @@ const userController = require('../controllers/user-controller')
 const { apiErrorHandler } = require('../middleware/error-handler')
 const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/api-auth') 
+const productController = require('../controllers/product-controller')
 
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
+
+router.get('/products', productController.getProducts)
 
 router.use('/', apiErrorHandler)
 

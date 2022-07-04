@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER,
     og_price: DataTypes.INTEGER,
     short_intro: DataTypes.STRING,
-    isOpen: DataTypes.BOOLEAN,
     description: DataTypes.STRING
   }, {
     sequelize,
