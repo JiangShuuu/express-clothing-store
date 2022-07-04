@@ -17,7 +17,7 @@ const productController = {
     productServices.putProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   },
   deleteProduct: (req, res, next) => {
-    productServices.deleteProduct(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+    productServices.deleteProduct(req, err => err ? next(err) : res.json({ status: 'success' }))
   }
 }
 

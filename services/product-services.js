@@ -56,6 +56,15 @@ const productController = {
       })
       .then((updateProduct) => cb(null, {product: updateProduct}))
       .catch(err => cb(err))
+  },
+  deleteProduct: (req, cb) => {
+    return Product.findByPk(req.params.id)
+      .then(product => {
+        if (!product) throw new Error("Product didn't exist!")
+        return product.destroy()
+      })
+      .then(() => cb(null))
+      .catch(err => cb(err))
   }
 }
 
