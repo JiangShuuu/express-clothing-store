@@ -11,6 +11,7 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 
 router.get('/products', productController.getProducts)
 router.post('/product', productController.postProduct)
+router.get('/product/:id', productController.getProduct)
 
 router.use('/', apiErrorHandler)
 
