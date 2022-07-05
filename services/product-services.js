@@ -1,4 +1,5 @@
 const { Product } = require('../models')
+const { localFileHandler } = require('../helpers/file-helpers')
 
 const productController = {
   getProducts: (req, cb) => {
@@ -23,13 +24,16 @@ const productController = {
     const { title, price, og_price, short_intro, description } = req.body  
     if (!title) throw new Error('title name is required!')
 
-    Product.create({ 
-      title,
-      price,
-      og_price,
-      short_intro,
-      description
-    })
+    const { file } = req
+    localFileHandler(file)
+      .then(filePath => Product.create({ 
+        title,
+        price,
+        og_price,
+        short_intro,
+        description,
+        image: filePath || null
+      }))
       .then((newProduct) => cb(null, { product: newProduct }))
       .catch(err => next(err))
   },
@@ -43,15 +47,22 @@ const productController = {
   putProduct: (req, cb) => {
     const { title, price, og_price, short_intro, description } = req.body
     if (!title) throw new Error('Product title is required!')
-    Product.findByPk(req.params.id)
-      .then(product => {
+
+    const { file } = req
+
+    Promise.all([
+      Product.findByPk(req.params.id),
+      localFileHandler(file)
+    ])
+      .then(([product, filePath]) => {
         if (!product) throw new Error("Product didn't exist!")
         return product.update({
           title,
           price,
           og_price,
           short_intro,
-          description
+          description,
+          image: filePath || product.image
         })
       })
       .then((updateProduct) => cb(null, {product: updateProduct}))
