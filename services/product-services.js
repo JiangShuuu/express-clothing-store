@@ -1,5 +1,5 @@
 const { Product } = require('../models')
-const { localFileHandler } = require('../helpers/file-helpers')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const productController = {
   getProducts: (req, cb) => {
@@ -25,7 +25,7 @@ const productController = {
     if (!title) throw new Error('title name is required!')
 
     const { file } = req
-    localFileHandler(file)
+    imgurFileHandler(file)
       .then(filePath => Product.create({ 
         title,
         price,
@@ -52,7 +52,7 @@ const productController = {
 
     Promise.all([
       Product.findByPk(req.params.id),
-      localFileHandler(file)
+      imgurFileHandler(file)
     ])
       .then(([product, filePath]) => {
         if (!product) throw new Error("Product didn't exist!")
