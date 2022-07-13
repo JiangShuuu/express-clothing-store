@@ -1,7 +1,7 @@
 const { Product } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
-const productController = {
+const productServices = {
   getProducts: (req, cb) => {
     Product.findAll({
       // 若沒raw會拿到sequelize物件
@@ -79,4 +79,4 @@ const productController = {
   }
 }
 
-module.exports = productController
+module.exports = productServices
