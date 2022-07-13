@@ -8,7 +8,7 @@ const productController = require('../controllers/product-controller')
 const upload = require('../middleware/multer')
 const admin = require('./modules/admin')
 
-router.use('/admin', admin)
+router.use('/admin', authenticated, authenticatedAdmin, admin)
 
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
