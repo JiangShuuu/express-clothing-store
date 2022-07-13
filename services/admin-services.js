@@ -1,5 +1,6 @@
 const db = require('../models')
 const { User } = db
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminServices = {
   getUsers: (req, cb) => {
@@ -9,7 +10,24 @@ const adminServices = {
     })
       .then(users => cb(null, { users }))
       .catch(err => cb(err))
-  }
+  },
+  patchUser: async (req, cb) => {
+    User.findByPk(req.params.id)
+      .then(user => {
+        if (!user) throw new Error("User didn't exist!")
+        if (user.email === 'root@example.com') {
+          throw new Error("root can't not change!")
+        }
+
+        user.isAdmin === false ? user.isAdmin = true : user.isAdmin = false
+
+        return user.update({
+          isAdmin: user.isAdmin
+        })
+      })
+      .then(() => cb(null))
+      .catch(err => cb(err))
+    }
 }
 
 module.exports = adminServices

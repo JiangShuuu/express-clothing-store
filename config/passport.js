@@ -1,7 +1,5 @@
 const passport = require('passport')
-const LocalStrategy = require('passport-local')
 const passportJWT = require('passport-jwt')
-const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 
