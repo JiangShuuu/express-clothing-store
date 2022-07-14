@@ -6,8 +6,8 @@ const productServices = {
     Product.findAll({
       // 若沒raw會拿到sequelize物件
       raw: true,
-      nest: true, // 增加這裡
-      include: [Category] // 增加這裡
+      nest: true,
+      include: [Category]
     })
       .then(products => cb(null, { products }))
       .catch(err => cb(err))
@@ -15,8 +15,8 @@ const productServices = {
   getProduct: (req, cb) => {
     Product.findByPk(req.params.id, {
       raw: true,
-      nest: true, // 增加這裡 
-      include: [Category]  // 增加這裡 
+      nest: true,
+      include: [Category]
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
@@ -25,7 +25,7 @@ const productServices = {
       .catch(err => cb(err))
   },
   postProduct: (req, cb) => {
-    const { title, price, og_price, short_intro, description } = req.body  
+    const { title, price, og_price, short_intro, description, categoryId } = req.body  
     if (!title) throw new Error('title name is required!')
 
     const { file } = req
@@ -36,20 +36,22 @@ const productServices = {
         og_price,
         short_intro,
         description,
-        image: filePath || null
+        image: filePath || null,
+        categoryId
       }))
       .then((newProduct) => cb(null, { product: newProduct }))
       .catch(err => next(err))
   },
   editProduct: (req, cb) => {
-    Product.findByPk(req.params.id, { 
-      raw: true 
-    })
-      .then(product => cb(null, { product }))
+    Promise.all([
+      Product.findByPk(req.params.id, { raw: true }),
+      Category.findAll({ raw: true })
+    ])
+      .then(([product, categories]) => cb(null, { product, categories }))
       .catch(err => cb(err))
   },
   putProduct: (req, cb) => {
-    const { title, price, og_price, short_intro, description } = req.body
+    const { title, price, og_price, short_intro, description, categoryId } = req.body
     if (!title) throw new Error('Product title is required!')
 
     const { file } = req
@@ -66,7 +68,8 @@ const productServices = {
           og_price,
           short_intro,
           description,
-          image: filePath || product.image
+          image: filePath || product.image,
+          categoryId
         })
       })
       .then((updateProduct) => cb(null, {product: updateProduct}))
