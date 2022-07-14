@@ -1,18 +1,22 @@
-const { Product } = require('../models')
+const { Product, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const productServices = {
   getProducts: (req, cb) => {
     Product.findAll({
       // 若沒raw會拿到sequelize物件
-      raw: true
+      raw: true,
+      nest: true, // 增加這裡
+      include: [Category] // 增加這裡
     })
       .then(products => cb(null, { products }))
       .catch(err => cb(err))
   },
   getProduct: (req, cb) => {
     Product.findByPk(req.params.id, {
-      raw: true
+      raw: true,
+      nest: true, // 增加這裡 
+      include: [Category]  // 增加這裡 
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
