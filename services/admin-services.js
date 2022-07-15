@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User } = db
+const { User, Category } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminServices = {
@@ -29,11 +29,12 @@ const adminServices = {
       .catch(err => cb(err))
   },
   getCategories: (req, cb) => {
-    return Category.findAll({
+    Category.findAll({
       raw: true
     })
-      .then(categories => cb(null, {categories}))
-  }
+      .then(categories => cb(null, { categories } ))
+      .catch(err => cb(err))
+  },
 }
 
 module.exports = adminServices
