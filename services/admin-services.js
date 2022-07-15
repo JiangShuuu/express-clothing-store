@@ -3,6 +3,7 @@ const { User, Category } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminServices = {
+  // User
   getUsers: (req, cb) => {
     User.findAll({
       // 若沒raw會拿到sequelize物件
@@ -28,6 +29,8 @@ const adminServices = {
       .then(() => cb(null))
       .catch(err => cb(err))
   },
+
+  // Category
   getCategories: (req, cb) => {
     Category.findAll({
       raw: true
@@ -35,6 +38,13 @@ const adminServices = {
       .then(categories => cb(null, { categories } ))
       .catch(err => cb(err))
   },
+  postCategory: (req, cb) => {
+    const { name } = req.body
+    if (!name) throw new Error('Category name is required!')
+    return Category.create({ name })
+      .then(() => cb(null))
+      .catch(err => cb(null))
+  }
 }
 
 module.exports = adminServices
