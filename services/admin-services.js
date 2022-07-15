@@ -32,16 +32,28 @@ const adminServices = {
 
   // Category
   getCategories: (req, cb) => {
-    Category.findAll({
-      raw: true
-    })
-      .then(categories => cb(null, { categories } ))
+    return Promise.all([
+      Category.findAll({ raw: true }),
+      req.params.id ? Category.findByPk(req.params.id, { raw: true }) : null
+    ])
+      .then(([categories, category]) => cb(null, { categories, category } ))
       .catch(err => cb(err))
   },
   postCategory: (req, cb) => {
     const { name } = req.body
     if (!name) throw new Error('Category name is required!')
     return Category.create({ name })
+      .then(() => cb(null))
+      .catch(err => cb(null))
+  },
+  putCategory: (req, cb) => {
+    const { name } = req.body
+    if (!name) throw new Error('Category name is required!')
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (!category) throw new Error ("category doesn't exist!")
+        return category.update({ name })
+      })
       .then(() => cb(null))
       .catch(err => cb(null))
   }

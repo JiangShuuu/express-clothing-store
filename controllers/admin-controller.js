@@ -12,6 +12,9 @@ const adminController = {
   },
   postCategory: (req, res, next) => {
     adminServices.postCategory(req, (err) => err ? next(err) : res.json({ status: 'success 成功建立類別' }))
+  },
+  putCategory: (req, res, next) => {
+    adminServices.putCategory(req, err => err ? next(err) : res.json({ status: 'success 成功修改類別' }))
   }
 }
 
