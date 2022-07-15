@@ -11,7 +11,7 @@ const adminServices = {
       .then(users => cb(null, { users }))
       .catch(err => cb(err))
   },
-  patchUser: async (req, cb) => {
+  patchUser: (req, cb) => {
     User.findByPk(req.params.id)
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
@@ -27,7 +27,13 @@ const adminServices = {
       })
       .then(() => cb(null))
       .catch(err => cb(err))
-    }
+  },
+  getCategories: (req, cb) => {
+    return Category.findAll({
+      raw: true
+    })
+      .then(categories => cb(null, {categories}))
+  }
 }
 
 module.exports = adminServices
