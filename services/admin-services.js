@@ -44,7 +44,7 @@ const adminServices = {
     if (!name) throw new Error('Category name is required!')
     return Category.create({ name })
       .then(() => cb(null))
-      .catch(err => cb(null))
+      .catch(err => cb(err))
   },
   putCategory: (req, cb) => {
     const { name } = req.body
@@ -55,7 +55,16 @@ const adminServices = {
         return category.update({ name })
       })
       .then(() => cb(null))
-      .catch(err => cb(null))
+      .catch(err => cb(err))
+  },
+  deleteCategory: (req, cb) => {
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (!category) throw new Error("Category didn't exist!")
+        return category.destroy()
+      })
+      .then(() => cb(null))
+      .catch(err => cb(err))
   }
 }
 
