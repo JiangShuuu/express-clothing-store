@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.addColumn('Products', 'category_id', {
+    await queryInterface.createTable('Products', 'category_id', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {

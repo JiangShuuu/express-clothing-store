@@ -26,8 +26,9 @@ const productServices = {
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
-        cb(null, { product })
+        return product.increment('viewCounts')
       })
+      .then((product) => cb(null, { product }))
       .catch(err => cb(err))
   },
   postProduct: (req, cb) => {
