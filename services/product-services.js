@@ -9,7 +9,13 @@ const productServices = {
       nest: true,
       include: [Category]
     })
-      .then(products => cb(null, { products }))
+      .then(products => {
+        const data = products.map( item => ({
+          ...item,
+          description: item.description.substring(0, 50)
+        }))
+        cb(null, { data })
+      })
       .catch(err => cb(err))
   },
   getProduct: (req, cb) => {
