@@ -3,18 +3,28 @@ const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const productServices = {
   getProducts: (req, cb) => {
-    Product.findAll({
-      // 若沒raw會拿到sequelize物件
-      raw: true,
-      nest: true,
-      include: [Category]
-    })
-      .then(products => {
+    const categoryId = Number(req.query.categoryId) || ''
+
+    return Promise.all([
+      Product.findAll({
+        // 若沒raw會拿到sequelize物件
+        raw: true,
+        nest: true,
+        include: [Category],
+        where: {  // 新增查詢條件
+          ...categoryId ? { categoryId } : {} // 檢查 categoryId 是否為空值
+        },
+      }),
+      Category.findAll({
+        raw: true
+      })
+    ])
+      .then(([products, categories]) => {
         const data = products.map( item => ({
           ...item,
           description: item.description.substring(0, 50)
         }))
-        cb(null, { data })
+        cb(null, { data, categories })
       })
       .catch(err => cb(err))
   },
