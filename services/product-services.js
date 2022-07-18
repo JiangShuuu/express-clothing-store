@@ -1,16 +1,23 @@
 const { Product, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const productServices = {
   getProducts: (req, cb) => {
+    const DEFAULT_LIMIT = 9
     const categoryId = Number(req.query.categoryId) || ''
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || DEFAULT_LIMIT
+    const offset = getOffset(limit, page)
 
     return Promise.all([
-      Product.findAll({
+      Product.findAndCountAll({
         // 若沒raw會拿到sequelize物件
         raw: true,
         nest: true,
         include: [Category],
+        limit,
+        offset,
         where: {  // 新增查詢條件
           ...categoryId ? { categoryId } : {} // 檢查 categoryId 是否為空值
         },
@@ -20,11 +27,16 @@ const productServices = {
       })
     ])
       .then(([products, categories]) => {
-        const data = products.map( item => ({
+        const data = products.rows.map( item => ({
           ...item,
           description: item.description.substring(0, 50)
         }))
-        cb(null, { data, categories })
+        cb(null, { 
+          data,
+          categories,
+          categoryId,
+          pagination: getPagination(limit, page, products.count)
+        })
       })
       .catch(err => cb(err))
   },
