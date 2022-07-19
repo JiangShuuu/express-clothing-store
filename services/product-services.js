@@ -1,4 +1,4 @@
-const { Product, Category } = require('../models')
+const { Product, Category, Comment, User } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
@@ -44,13 +44,17 @@ const productServices = {
     Product.findByPk(req.params.id, {
       raw: true,
       nest: true,
-      include: [Category]
+      include: [
+        Category,
+        { model: Comment, include: User }
+      ]
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
-        return product.increment('viewCounts')
+        // console.log(product)
+        // return product.viewCounts++
+        cb(null, { product })
       })
-      .then((product) => cb(null, { product }))
       .catch(err => cb(err))
   },
   postProduct: (req, cb) => {
