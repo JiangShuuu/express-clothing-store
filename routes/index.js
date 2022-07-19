@@ -5,6 +5,7 @@ const { apiErrorHandler } = require('../middleware/error-handler')
 const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/api-auth') 
 const productController = require('../controllers/product-controller')
+const commentController = require('../controllers/comment-controller')
 const upload = require('../middleware/multer')
 const admin = require('./modules/admin')
 
@@ -19,6 +20,9 @@ router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
 router.get('/product/:id', productController.getProduct)
 router.delete('/product/:id', productController.deleteProduct)
+
+// Comment
+router.post('/comments', authenticated, commentController.postComment)
 
 router.use('/', apiErrorHandler)
 
