@@ -22,6 +22,15 @@ const commentController = {
         cb(null, {})
       })
       .catch(err => cb(err))
+  },
+  deleteComment: (req, cb) => {
+    return Comment.findByPk(req.params.id)
+      .then(comment => {
+        if (!comment) throw new Error("Comment didn't exist!")
+        return comment.destroy()
+      })
+      .then(() => cb(null, {}))
+      .catch(err => cb(err))
   }
 }
 
