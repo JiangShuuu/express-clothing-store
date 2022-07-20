@@ -19,6 +19,19 @@ const userServices = {
       }))
       .then((newUser) => cb(null, { user: newUser}))
       .catch(err => cb(err))
+  },
+  getUser: (req, cb) => {
+    User.findByPk(req.params.id, {
+      raw: true,
+      nest: true
+    })
+      .then(user => {
+        if (!user) throw new Error ("User didn't exist!")
+        delete user.password
+        
+        cb(null, { user })
+      })
+      .catch(err => cb(err))
   }
 }
 

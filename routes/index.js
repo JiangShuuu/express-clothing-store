@@ -11,6 +11,8 @@ const admin = require('./modules/admin')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 
+// User
+router.get('/users/:id', userController.getUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
@@ -22,9 +24,10 @@ router.get('/product/:id', productController.getProduct)
 router.delete('/product/:id', productController.deleteProduct)
 
 // Comment
-// delete驗證待解決
 router.delete('/comments/:id', authenticated, authenticatedAdmin, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
+
+
 
 router.use('/', apiErrorHandler)
 
