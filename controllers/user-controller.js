@@ -9,6 +9,12 @@ const userController = {
   },
   getUser: (req, res, next) => {
     userServices.getUser(req, (err, data) => err ? next(err) : res.json({ status: 'success, 獲取 User 資料', data }))
+  },
+  editUser: (req, res, next) => {
+    userServices.editUser(req, (err, data) => err ? next(err) : res.json({ status: 'success getEdit', data }))
+  },
+  putUser: (req, res, next) => {
+    userServices.putUser(req, (err, data) => err ? next(err) : res.json({ status: 'success 修改 User 資料', data }))
   }
 }
 module.exports = userController

@@ -44,6 +44,27 @@ const userServices = {
         cb(null, { user })
       })
       .catch(err => cb(err))
+  },
+  editUser: (req, cb) => {
+    User.findByPk(req.params.id, { raw: true })
+      .then(user => cb(null, { user }))
+      .catch(err => cb(err))
+  },
+  putUser: (req, cb) => {
+    const { name, email, password } = req.body
+    if (!email) throw new Error('User email is required!')
+
+    User.findByPk(req.params.id)
+      .then(user => {
+        if (!user) throw new Error("User didn't exist!")
+        return user.update({
+          name,
+          email,
+          password
+        })
+      })
+      .then(updateUser => cb(null, { updateUser }))
+      .catch(err => cb(err))
   }
 }
 
