@@ -1,8 +1,20 @@
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
 
 const userServices = {
+  signIn: (req, cb) => {
+    try {
+      const userData = req.user.toJSON()
+      delete userData.password
+      const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
+
+      cb(null, { token, user: userData })
+    } catch (err) {
+      cb(err)
+    }
+  },
   signUp: (req, cb) => {
 
     if (req.body.password !== req.body.passwordCheck) throw new Error('Passwords do not match!')
@@ -28,7 +40,7 @@ const userServices = {
       .then(user => {
         if (!user) throw new Error ("User didn't exist!")
         delete user.password
-        
+
         cb(null, { user })
       })
       .catch(err => cb(err))
