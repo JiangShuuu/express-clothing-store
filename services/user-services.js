@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User } = db
+const { User, Comment, Product } = db
 
 const userServices = {
   signIn: (req, cb) => {
@@ -35,7 +35,11 @@ const userServices = {
   getUser: (req, cb) => {
     User.findByPk(req.params.id, {
       raw: true,
-      nest: true
+      nest: true,
+      include: [
+        Comment,
+        { model: Comment, include: Product }
+      ]
     })
       .then(user => {
         if (!user) throw new Error ("User didn't exist!")
