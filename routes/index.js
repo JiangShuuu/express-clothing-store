@@ -28,7 +28,8 @@ router.delete('/product/:id', productController.deleteProduct)
 router.delete('/comments/:id', authenticated, authenticatedAdmin, commentController.deleteComment)
 router.post('/comments', authenticated, commentController.postComment)
 
-
+// Feeds
+router.get('/products/feeds', authenticated, productController.getFeeds)
 
 router.use('/', apiErrorHandler)
 

@@ -116,6 +116,29 @@ const productServices = {
       })
       .then(() => cb(null))
       .catch(err => cb(err))
+  },
+  // Feeds
+  getFeeds: (req, cb) => {
+    return Promise.all([
+      Product.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [Category],
+        raw: true,
+        nest: true
+      }),
+      Comment.findAll({
+        limit: 10,
+        order: [['createdAt', 'DESC']],
+        include: [User, Product],
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([products, comments]) => {
+        cb(null, {products, comments})
+      })
+      .catch(err => cb(err))
   }
 }
 

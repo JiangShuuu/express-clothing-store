@@ -18,6 +18,9 @@ const productController = {
   },
   deleteProduct: (req, res, next) => {
     productServices.deleteProduct(req, err => err ? next(err) : res.json({ status: 'success del' }))
+  },
+  getFeeds: (req, res, next) => {
+    productServices.getFeeds(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 
