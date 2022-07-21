@@ -43,19 +43,18 @@ const productServices = {
       .catch(err => cb(err))
   },
   getProduct: (req, cb) => {
-    Product.findByPk(req.params.id, {
-      raw: true,
-      nest: true,
+    return Product.findByPk(req.params.id, {
       include: [
         Category,
-        { model: Comment, include: User }
+        { model: Comment, include: User },
+        { model: User, as: 'FavoritedUsers' }
       ]
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
-        // console.log(product)
-        // return product.viewCounts++
-        cb(null, { product })
+        const isFavorited = product.FavoritedUsers.some(f => f.id === req.user.id)
+        product.increment('viewCounts')
+        cb(null, { product, isFavorited })
       })
       .catch(err => cb(err))
   },

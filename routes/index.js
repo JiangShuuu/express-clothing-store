@@ -22,7 +22,8 @@ router.get('/products', authenticated, productController.getProducts)
 router.post('/product', upload.single('image'), productController.postProduct)
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
-router.get('/product/:id', productController.getProduct)
+// 如何達到不一定要登入取得資料
+router.get('/product/:id', authenticated, productController.getProduct)
 router.delete('/product/:id', productController.deleteProduct)
 
 // Comment
