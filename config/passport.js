@@ -2,8 +2,7 @@ const passport = require('passport')
 const passportJWT = require('passport-jwt')
 const bcrypt = require('bcryptjs')
 const LocalStrategy = require('passport-local')
-const db = require('../models')
-const User = db.User
+const { User, Product } = require('../models')
 
 // 新增這兩行
 const JWTStrategy = passportJWT.Strategy
@@ -35,7 +34,11 @@ passport.use(new LocalStrategy(
 ))
 
 passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
-  User.findByPk(jwtPayload.id)
+  User.findByPk(jwtPayload.id, {
+    include: [
+      { model: Product, as: 'FavoritedProducts' }
+    ]
+  })
     .then(user => cb(null, user))
     .catch(err => cb(err))
 }))

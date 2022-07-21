@@ -17,7 +17,8 @@ router.put('/users/:id', authenticated, userController.putUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
-router.get('/products', productController.getProducts)
+// 如何達到不一定要登入取得資料
+router.get('/products', authenticated, productController.getProducts)
 router.post('/product', upload.single('image'), productController.postProduct)
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)

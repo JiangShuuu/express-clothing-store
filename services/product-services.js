@@ -27,9 +27,12 @@ const productServices = {
       })
     ])
       .then(([products, categories]) => {
+        // console.log(123, req.user)
+        const FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
         const data = products.rows.map( item => ({
           ...item,
-          description: item.description.substring(0, 50)
+          description: item.description.substring(0, 50),
+          isFavorited: FavoritedProductsId.includes(item.id)
         }))
         cb(null, { 
           data,
