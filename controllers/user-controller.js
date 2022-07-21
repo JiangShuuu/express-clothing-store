@@ -15,6 +15,12 @@ const userController = {
   },
   putUser: (req, res, next) => {
     userServices.putUser(req, (err, data) => err ? next(err) : res.json({ status: 'success 修改 User 資料', data }))
+  },
+  addFavorite: (req, res, next) => {
+    userServices.addFavorite(req, err => err ? next(err) : res.json({ status: 'success 加入最愛' }))
+  },
+  removeFavorite: (req, res, next) => {
+    userServices.removeFavorite(req, err => err ? next(err) : res.json({ status: 'success 移除最愛' }))
   }
 }
 module.exports = userController

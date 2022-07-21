@@ -31,6 +31,10 @@ router.post('/comments', authenticated, commentController.postComment)
 // Feeds
 router.get('/products/feeds', authenticated, productController.getFeeds)
 
+// Favorite
+router.post('/foverite/:productId', authenticated, userController.addFavorite)
+router.delete('/foverite/:productId', authenticated, userController.removeFavorite)
+
 router.use('/', apiErrorHandler)
 
 module.exports = router

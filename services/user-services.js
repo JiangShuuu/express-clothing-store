@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, Comment, Product } = db
+const { User, Comment, Product, Favorite } = db
 
 const userServices = {
   signIn: (req, cb) => {
@@ -68,6 +68,44 @@ const userServices = {
         })
       })
       .then(updateUser => cb(null, { updateUser }))
+      .catch(err => cb(err))
+  },
+  addFavorite: (req, cb) => {
+    const { productId } = req.params
+    return Promise.all([
+      Product.findByPk(productId),
+      Favorite.findOne({
+        where: {
+          userId: req.user.id,
+          productId
+        }
+      })
+    ])
+      .then(([product, favorite]) => {
+        if (!product) throw new Error ("Product didn't exist!")
+        if (favorite) throw new Error ("You have favorited this Product!")
+
+        return Favorite.create({
+          userId: req.user.id,
+          productId
+        })
+      })
+      .then(() => cb(null))
+      .catch((err) => cb(err))
+  },
+  removeFavorite: (req, cb) => {
+    return Favorite.findOne({
+      where: {
+        userId: req.user.id,
+        productId: req.params.productId
+      }
+    })
+      .then(favorite => {
+        if (!favorite) throw new Error("You haven't favorited this Product!")
+
+        return favorite.destroy()
+      })
+      .then(() => cb(null, {}))
       .catch(err => cb(err))
   }
 }
