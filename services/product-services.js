@@ -28,10 +28,13 @@ const productServices = {
     ])
       .then(([products, categories]) => {
         const FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
+        const CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
+
         const data = products.rows.map( item => ({
           ...item,
           description: item.description.substring(0, 50),
-          isFavorited: FavoritedProductsId.includes(item.id)
+          isFavorited: FavoritedProductsId.includes(item.id),
+          isCart: CartProductsId.includes(item.id)
         }))
         cb(null, { 
           data,
@@ -47,14 +50,17 @@ const productServices = {
       include: [
         Category,
         { model: Comment, include: User },
-        { model: User, as: 'FavoritedUsers' }
+        { model: User, as: 'FavoritedUsers' },
+        { model: User, as: 'CartUsers'}
       ]
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
         const isFavorited = product.FavoritedUsers.some(f => f.id === req.user.id)
+        const isCart = product.CartUsers.some(f => f.id === req.user.id)
+
         product.increment('viewCounts')
-        cb(null, { product, isFavorited })
+        cb(null, { product, isFavorited, isCart })
       })
       .catch(err => cb(err))
   },

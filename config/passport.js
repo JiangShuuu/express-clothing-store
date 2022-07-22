@@ -36,7 +36,8 @@ passport.use(new LocalStrategy(
 passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
   User.findByPk(jwtPayload.id, {
     include: [
-      { model: Product, as: 'FavoritedProducts' }
+      { model: Product, as: 'FavoritedProducts' },
+      { model: Product, as: 'CartProducts' }
     ]
   })
     .then(user => cb(null, user))
