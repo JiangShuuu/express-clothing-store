@@ -37,6 +37,10 @@ router.get('/products/feeds', authenticated, productController.getFeeds)
 router.post('/foverite/:productId', authenticated, userController.addFavorite)
 router.delete('/foverite/:productId', authenticated, userController.removeFavorite)
 
+// Cart
+router.post('/cart/:productId', authenticated, userController.addCart)
+router.delete('/cart/:productId', authenticated, userController.removeCart)
+
 router.use('/', apiErrorHandler)
 
 module.exports = router

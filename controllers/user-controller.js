@@ -1,3 +1,4 @@
+const user = require('../models/user')
 const userServices = require('../services/user-services')
 
 const userController = {
@@ -21,6 +22,12 @@ const userController = {
   },
   removeFavorite: (req, res, next) => {
     userServices.removeFavorite(req, err => err ? next(err) : res.json({ status: 'success 移除最愛' }))
+  },
+  addCart: (req, res, next) => {
+    userServices.addCart(req, err => err ? next(err) : res.json({ status: 'success 加入購物車' }))
+  },
+  removeCart: (req, res, next) => {
+    userServices.removeCart(req, err => err ? next(err) : res.json({ stauts: 'success 移出購物車' }))
   }
 }
 module.exports = userController

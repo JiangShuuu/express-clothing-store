@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, Comment, Product, Favorite } = db
+const { User, Comment, Product, Favorite, Cart } = db
 
 const userServices = {
   signIn: (req, cb) => {
@@ -104,6 +104,44 @@ const userServices = {
         if (!favorite) throw new Error("You haven't favorited this Product!")
 
         return favorite.destroy()
+      })
+      .then(() => cb(null, {}))
+      .catch(err => cb(err))
+  },
+  addCart: (req, cb) => {
+    const { productId } = req.params
+    return Promise.all([
+      Product.findByPk(productId),
+      Cart.findOne({
+        where: {
+          userId: req.user.id,
+          productId
+        }
+      })
+    ])
+      .then(([product, cart]) => {
+        if (!product) throw new Error ("Product didn't exist!")
+        if (cart) throw new Error ("You're Cart have this Product!")
+
+        return Cart.create({
+          userId: req.user.id,
+          productId
+        })
+      })
+      .then(() => cb(null, {}))
+      .catch(err => cb(err))
+  },
+  removeCart: (req, cb) => {
+    return Cart.findOne({
+      where: {
+        userId: req.user.id,
+        productId: req.params.productId
+      }
+    })
+      .then(cart => {
+        if (!cart) throw new Error ("You're Cart haven't add this Product!")
+
+        return cart.destroy()
       })
       .then(() => cb(null, {}))
       .catch(err => cb(err))
