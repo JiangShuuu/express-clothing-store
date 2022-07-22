@@ -1,4 +1,3 @@
-const user = require('../models/user')
 const userServices = require('../services/user-services')
 
 const userController = {
@@ -28,6 +27,9 @@ const userController = {
   },
   removeCart: (req, res, next) => {
     userServices.removeCart(req, err => err ? next(err) : res.json({ stauts: 'success 移出購物車' }))
+  },
+  getCarts: (req, res, next) => {
+    userServices.getCarts(req, (err, data) => err ? next(err) : res.json({ status: 'success 取得購物車' }))
   }
 }
 module.exports = userController

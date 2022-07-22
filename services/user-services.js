@@ -145,6 +145,35 @@ const userServices = {
       })
       .then(() => cb(null, {}))
       .catch(err => cb(err))
+  },
+  getCarts: (req, cb) => {
+    // 找出該user的productId v
+    // 用productId 得到 詳細資料
+    // 輸出
+    const userId = req.user.id
+
+    Cart.findAll({
+      raw: true,
+      where: { userId: `${userId}` },
+    })
+      .then(carts => {
+        let groups = []
+        carts.forEach(items => {
+          Product.findByPk(items.productId, {
+            raw: true
+          })
+            .then(product => {
+              groups.push(product)
+              return groups
+            })
+            .catch(err => cb(err))
+        })
+      })
+      .then((groups) => {
+        console.log(456, groups)
+        cb(null, {})}
+      )
+      .catch(err => cb(err))
   }
 }
 
