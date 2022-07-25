@@ -146,6 +146,33 @@ const productServices = {
         cb(null, {products, comments})
       })
       .catch(err => cb(err))
+  },
+  getTopProducts: (req, cb) => {
+    return Product.findAll({
+      include: [
+        { model: User, as: 'FavoritedUsers' }]
+    })
+      .then(product => {
+        const result = product
+          .map(product => ({
+            ...product.toJSON(),
+            favoritedCount: product.FavoritedUsers.length,
+            isFavorited: req.user && req.user.FavoritedProducts.some(l => l.id === product.id)
+          }))
+          .sort((a, b) => b.favoritedCount - a.favoritedCount)
+        result.splice(10)
+        return cb(null, {result})
+      })
+      .catch(err => cb(err))
+    // const favorite = await Favorite.findAll({
+    //   group: 'product_id',
+    //   attributes: ['product_id', [Sequelize.fn('count', Sequelize.col('user_id')), 'favorite_count']],
+    //   order: [[Sequelize.col('favorite_count'), 'DESC']],
+    //   limit: 10,
+    //   raw: true
+    // })
+    // console.log(123, favorite)
+    // cb(null, { favorite })
   }
 }
 
