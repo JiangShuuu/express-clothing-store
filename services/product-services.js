@@ -28,23 +28,20 @@ const productServices = {
       })
     ])
       .then(([products, categories]) => {
-        let data
-        
-        if (req.user) {
-          const FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
-          const CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
-          data = products.rows.map( item => ({
-            ...item,
-            description: item.description.substring(0, 50),
-            isFavorited: FavoritedProductsId.includes(item.id),
-            isCart: CartProductsId.includes(item.id)
-          }))
-        } else {
-          data = products.rows.map( item => ({
-            ...item,
-            description: item.description.substring(0, 50),
-          }))
+        let FavoritedProductsId
+        let CartProductsId
+
+        if(req.user) {
+          FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
+          CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
         }
+        
+        const data = products.rows.map( item => ({
+          ...item,
+          description: item.description.substring(0, 50),
+          isFavorited: FavoritedProductsId?.includes(item.id),
+          isCart: CartProductsId?.includes(item.id)
+        }))
         
         cb(null, { 
           data,
