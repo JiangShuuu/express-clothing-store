@@ -17,7 +17,8 @@ router.put('/users/:id', authenticated, userController.putUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
-router.get('/products/top', authenticated, productController.getTopProducts)
+// Product
+router.get('/products/top', authIsUser, productController.getTopProducts)
 router.get('/products', authIsUser, productController.getProducts)
 router.post('/product', upload.single('image'), productController.postProduct)
 router.get('/product/:id/edit', productController.editProduct)
@@ -30,7 +31,7 @@ router.delete('/comments/:id', authenticated, authenticatedAdmin, commentControl
 router.post('/comments', authenticated, commentController.postComment)
 
 // Feeds
-router.get('/products/feeds', authenticated, productController.getFeeds)
+router.get('/products/feeds', productController.getFeeds)
 
 // Favorite
 router.post('/foverite/:productId', authenticated, userController.addFavorite)

@@ -174,7 +174,7 @@ const productServices = {
     }).then(result => {
       const top = result.map(product => ({
         ...product,
-        isFavorited: req.user && req.user.FavoritedProducts.some(l => l.id === product.product_id)
+        isFavorited: req.user && req.user.FavoritedProducts?.some(l => l.id === product.product_id)
       })) 
       cb(null, { top })
     }).catch(err => cb(err))
