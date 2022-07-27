@@ -28,15 +28,24 @@ const productServices = {
       })
     ])
       .then(([products, categories]) => {
-        const FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
-        const CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
-
-        const data = products.rows.map( item => ({
-          ...item,
-          description: item.description.substring(0, 50),
-          isFavorited: FavoritedProductsId.includes(item.id),
-          isCart: CartProductsId.includes(item.id)
-        }))
+        let data
+        
+        if (req.user) {
+          const FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
+          const CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
+          data = products.rows.map( item => ({
+            ...item,
+            description: item.description.substring(0, 50),
+            isFavorited: FavoritedProductsId.includes(item.id),
+            isCart: CartProductsId.includes(item.id)
+          }))
+        } else {
+          data = products.rows.map( item => ({
+            ...item,
+            description: item.description.substring(0, 50),
+          }))
+        }
+        
         cb(null, { 
           data,
           categories,
@@ -57,11 +66,20 @@ const productServices = {
     })
       .then(product => {
         if (!product) throw new Error ("Product didn't exist!")
-        const isFavorited = product.FavoritedUsers.some(f => f.id === req.user.id)
-        const isCart = product.CartUsers.some(f => f.id === req.user.id)
 
         product.increment('viewCounts')
-        cb(null, { product, isFavorited, isCart })
+
+        if (req.user) {
+
+          const isFavorited = product.FavoritedUsers.some(f => f.id === req.user.id)
+          const isCart = product.CartUsers.some(f => f.id === req.user.id)
+
+          return cb(null, { product, isFavorited, isCart })
+        } else {
+
+          cb(null, { product })
+
+        }
       })
       .catch(err => cb(err))
   },

@@ -3,7 +3,7 @@ const router = express.Router()
 const userController = require('../controllers/user-controller')
 const { apiErrorHandler } = require('../middleware/error-handler')
 const passport = require('../config/passport')
-const { authenticated, authenticatedAdmin } = require('../middleware/api-auth') 
+const { authenticated, authenticatedAdmin, authIsUser } = require('../middleware/api-auth') 
 const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
 const upload = require('../middleware/multer')
@@ -18,13 +18,11 @@ router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 
 router.get('/products/top', authenticated, productController.getTopProducts)
-// 如何達到不一定要登入取得資料
-router.get('/products', authenticated, productController.getProducts)
+router.get('/products', authIsUser, productController.getProducts)
 router.post('/product', upload.single('image'), productController.postProduct)
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
-// 如何達到不一定要登入取得資料
-router.get('/product/:id', authenticated, productController.getProduct)
+router.get('/product/:id', authIsUser, productController.getProduct)
 router.delete('/product/:id', productController.deleteProduct)
 
 // Comment
