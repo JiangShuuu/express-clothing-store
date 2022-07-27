@@ -154,9 +154,14 @@ const productServices = {
       attributes: ['product_id', [Sequelize.fn('count', Sequelize.col('user_id')), 'favorite_count']],
       order: [[Sequelize.col('favorite_count'), 'DESC']],
       limit: 10,
-      raw: true
+      raw: true,
+      
     }).then(result => {
-      cb(null, { result })
+      const top = result.map(product => ({
+        ...product,
+        isFavorited: req.user && req.user.FavoritedProducts.some(l => l.id === product.product_id)
+      })) 
+      cb(null, { top })
     }).catch(err => cb(err))
   }
 }
