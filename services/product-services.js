@@ -51,8 +51,8 @@ const productServices = {
       include: [
         Category,
         { model: Comment, include: User },
-        { model: User, as: 'FavoritedUsers' },
-        { model: User, as: 'CartUsers'}
+        { model: User, as: 'FavoritedUsers', attributes: ['id', 'name', 'email'] },
+        { model: User, as: 'CartUsers', attributes: ['id', 'name', 'email'] }
       ]
     })
       .then(product => {

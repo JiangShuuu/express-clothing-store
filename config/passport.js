@@ -40,7 +40,12 @@ passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
       { model: Product, as: 'CartProducts' }
     ]
   })
-    .then(user => cb(null, user))
+    .then(user => {
+      const userData = user.toJSON()
+      delete userData.password
+      
+      cb(null, userData )
+    })
     .catch(err => cb(err))
 }))
 
