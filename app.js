@@ -4,13 +4,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const methodOverride = require('method-override')
+const cors = require('cors')
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const routes = require('./routes')
 //const passport = require('./config/passport')
 const session = require('express-session')
 const SESSION_SECRET = 'secret'
 const path = require('path')
+
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
