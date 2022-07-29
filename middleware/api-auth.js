@@ -1,4 +1,5 @@
 const passport = require('../config/passport') // 引入 passport
+
 const authIsUser = ( req, res, next ) => {
   function cb(error, user) {
     if (!error && user) req.user = user
