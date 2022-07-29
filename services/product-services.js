@@ -96,7 +96,7 @@ const productServices = {
         categoryId
       }))
       .then((newProduct) => cb(null, { product: newProduct }))
-      .catch(err => next(err))
+      .catch(err => cb(err))
   },
   editProduct: (req, cb) => {
     Promise.all([

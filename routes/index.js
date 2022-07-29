@@ -19,11 +19,8 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 // Product
 router.get('/products/top', authIsUser, productController.getTopProducts)
 router.get('/products', authIsUser, productController.getProducts)
-
-router.get('/product/:id/edit', productController.editProduct)
-router.put('/product/:id', upload.single('image'), productController.putProduct)
 router.get('/product/:id', authIsUser, productController.getProduct)
-router.delete('/product/:id', productController.deleteProduct)
+
 
 // Comment
 router.delete('/comments/:id', authenticated, authenticatedAdmin, commentController.deleteComment)
