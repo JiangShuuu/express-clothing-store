@@ -12,7 +12,7 @@ const admin = require('./modules/admin')
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 
 // User
-router.get('/users/:id', authenticatedAdmin, userController.getUser)
+router.get('/users/:id', userController.getUser)
 router.put('/users/:id', authenticated, userController.putUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
