@@ -12,7 +12,6 @@ const admin = require('./modules/admin')
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 
 // User
-router.get('/users/:id', authenticatedAdmin, userController.getUser)
 router.put('/users/:id', authenticated, userController.putUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
@@ -20,7 +19,7 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 // Product
 router.get('/products/top', authIsUser, productController.getTopProducts)
 router.get('/products', authIsUser, productController.getProducts)
-router.post('/product', upload.single('image'), productController.postProduct)
+
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
 router.get('/product/:id', authIsUser, productController.getProduct)
