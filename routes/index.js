@@ -6,7 +6,6 @@ const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin, authIsUser } = require('../middleware/api-auth') 
 const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
-const upload = require('../middleware/multer')
 const admin = require('./modules/admin')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
@@ -20,7 +19,6 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 router.get('/products/top', authIsUser, productController.getTopProducts)
 router.get('/products', authIsUser, productController.getProducts)
 router.get('/product/:id', authIsUser, productController.getProduct)
-
 
 // Comment
 router.delete('/comments/:id', authenticated, authenticatedAdmin, commentController.deleteComment)

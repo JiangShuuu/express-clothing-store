@@ -3,7 +3,9 @@ const router = express.Router()
 const adminController = require('../../controllers/admin-controller')
 const userController = require('../../controllers/user-controller')
 const productController = require('../../controllers/product-controller')
+const commentController = require('../../controllers/comment-controller')
 const upload = require('../../middleware/multer')
+
 // user
 router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
@@ -17,11 +19,14 @@ router.delete('/product/:id', productController.deleteProduct)
 router.get('/products', productController.getProducts)
 router.get('/product/:id', productController.getProduct)
 
-// category
+// Category
 router.get('/categories/:id', adminController.getCategories)
 router.put('/categories/:id', adminController.putCategory)
 router.delete('/categories/:id', adminController.deleteCategory)
 router.get('/categories', adminController.getCategories)
 router.post('/categories', adminController.postCategory)
+
+// Comment
+router.delete('/comments/:id', commentController.deleteComment)
 
 module.exports = router
