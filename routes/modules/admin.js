@@ -12,12 +12,12 @@ router.get('/users', adminController.getUsers)
 router.get('/users/:id', userController.getUser)
 
 // Product
-router.post('/product', upload.single('image'), productController.postProduct)
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
 router.delete('/product/:id', productController.deleteProduct)
-router.get('/products', productController.getProducts)
 router.get('/product/:id', productController.getProduct)
+router.get('/products', productController.getProducts)
+router.post('/product', upload.single('image'), productController.postProduct)
 
 // Category
 router.get('/categories/:id', adminController.getCategories)
