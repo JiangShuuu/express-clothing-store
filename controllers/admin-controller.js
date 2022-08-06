@@ -21,7 +21,12 @@ const adminController = {
   },
   deleteCategory: (req, res, next) => {
     adminServices.deleteCategory(req, err => err ? next(err) : res.json({ status: 'success 成功刪除類別' }))
-  }
+  },
+
+  // Products
+  getProducts: (req, res, next) => {
+    adminServices.getProducts(req, (err, data) => err ? next(err) : res.json({ status: 'success getAll', data }))
+  },
 }
 
 module.exports = adminController

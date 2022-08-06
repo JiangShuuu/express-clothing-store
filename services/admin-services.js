@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User, Category } = db
+const { User, Category, Product } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminServices = {
@@ -64,6 +64,43 @@ const adminServices = {
         return category.destroy()
       })
       .then(() => cb(null))
+      .catch(err => cb(err))
+  },
+
+  // Product
+  getProducts: (req, cb) => {
+    const categoryId = Number(req.query.categoryId) || ''
+
+    return Promise.all([
+      Product.findAll({
+        // 若沒raw會拿到sequelize物件
+        raw: true,
+        nest: true,
+        include: [Category],
+        where: {  // 新增查詢條件
+          ...categoryId ? { categoryId } : {} // 檢查 categoryId 是否為空值
+        },
+      }),
+      
+      Category.findAll({
+        raw: true
+      })
+    ])
+      .then(([products, categories]) => {
+        let FavoritedProductsId
+        let CartProductsId
+
+        if(req.user) {
+          FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
+          CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
+        }
+        
+        cb(null, { 
+          products,
+          categories,
+          categoryId,
+        })
+      })
       .catch(err => cb(err))
   }
 }
