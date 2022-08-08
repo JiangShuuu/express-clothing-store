@@ -16,7 +16,6 @@ module.exports = {
         short_intro: faker.random.words(5),
         description: faker.lorem.sentence(),
         image: faker.image.fashion(800, 1200, true),
-        isOpen: false,
         category_id: categories[Math.floor(Math.random() * categories.length)].id,
         created_at: new Date(),
         updated_at: new Date()
