@@ -1,6 +1,8 @@
 'use strict';
 
 const { faker } = require('@faker-js/faker')
+faker.locale = 'zh-TW';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     const categories = await queryInterface.sequelize.query(
@@ -13,8 +15,9 @@ module.exports = {
         price: faker.random.numeric(3),
         og_price: faker.random.numeric(4),
         short_intro: faker.random.words(5),
-        description: faker.lorem.sentence(25),
+        description: faker.lorem.sentence(),
         image: faker.image.fashion(800, 1200, true),
+        isOpen: false,
         category_id: categories[Math.floor(Math.random() * categories.length)].id,
         created_at: new Date(),
         updated_at: new Date()
