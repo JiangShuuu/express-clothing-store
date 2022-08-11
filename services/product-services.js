@@ -10,12 +10,15 @@ const productServices = {
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
     const offset = getOffset(limit, page)
+    const sort = req.query.sort || 'DESC'
+    const condition = req.query.value || 'createdAt'
 
     return Promise.all([
       Product.findAndCountAll({
         // 若沒raw會拿到sequelize物件
         raw: true,
         nest: true,
+        order: [[`${condition}`, `${sort}`]],
         include: [Category],
         limit,
         offset,
