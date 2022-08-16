@@ -32,6 +32,22 @@ const userServices = {
       .then((newUser) => cb(null, { user: newUser}))
       .catch(err => cb(err))
   },
+  getCurrentUser: async (req, cb) => {
+    try {
+      const userId = req.user.id
+      const currentUser = await User.findByPk(userId, {
+        attributes: [
+          'id',
+          'name',
+          'email',
+          'isAdmin'
+        ],
+      })
+      cb(null, { currentUser })
+    } catch (err) {
+      cb(err)
+    }
+  },
   getUser: (req, cb) => {
     User.findByPk(req.params.id, {
       raw: true,

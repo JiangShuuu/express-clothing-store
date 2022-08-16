@@ -30,6 +30,9 @@ const userController = {
   },
   getCarts: (req, res, next) => {
     userServices.getCarts(req, (err, data) => err ? next(err) : res.json({ status: 'success 取得購物車', data }))
+  },
+  getCurrentUser: (req, res, next) => {
+    userServices.getCurrentUser(req, (err, data) => err ? next(err) : res.json({ status: 'success 取得使用者資料', data }))
   }
 }
 module.exports = userController
