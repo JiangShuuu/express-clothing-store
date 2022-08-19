@@ -7,8 +7,10 @@ const { authenticated, authenticatedAdmin, authIsUser } = require('../middleware
 const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
 const admin = require('./modules/admin')
+const auth = require('./modules/auth')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
+router.use('/auth', auth)
 
 // User
 router.get('/users/:id', userController.getUser)
