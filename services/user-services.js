@@ -54,7 +54,8 @@ const userServices = {
       nest: true,
       include: [
         Comment,
-        { model: Comment, include: Product }
+        { model: Comment, include: Product },
+        { model: Product, as: 'CartProducts' }
       ]
     })
       .then(user => {
