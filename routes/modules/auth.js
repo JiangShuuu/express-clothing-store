@@ -7,12 +7,9 @@ const { User } = db
 
 router.post('/third-party-login', ((req, res) => {
   const { email, displayName } = req.body
-
+  const token = jwt.sign(req.body, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
   User.findOne({ where: { email } })
       .then(user => {
-        const userData = user.toJSON()
-        const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
-        
         if (user) return res.json({ status: 'success 成功登入', data:{ user, token } })
         const randomPassword = Math.random().toString(36).slice(-8)
         bcrypt
