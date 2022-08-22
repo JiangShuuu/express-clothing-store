@@ -50,8 +50,6 @@ const userServices = {
   },
   getUser: (req, cb) => {
     User.findByPk(req.params.id, {
-      raw: true,
-      nest: true,
       include: [
         Comment,
         { model: Comment, include: Product },
