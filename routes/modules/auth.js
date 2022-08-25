@@ -3,14 +3,19 @@ const router = express.Router()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const db = require('../../models')
-const { User } = db
+const { User, Product } = db
 
 router.post('/third-party-login', ((req, res) => {
   const { email, displayName } = req.body
   
-  User.findOne({ where: { email } })
+  User.findOne({ 
+      where: { email },
+      include: [
+        { model: Product, as: 'CartProducts' }
+      ]
+    })
       .then(user => {
-
+        
         if (user) {
           const userData = user.toJSON()
           const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
