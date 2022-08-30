@@ -28,6 +28,12 @@ const userController = {
   removeCart: (req, res, next) => {
     userServices.removeCart(req, err => err ? next(err) : res.json({ stauts: 'success 移出購物車' }))
   },
+  addCount: (req, res, next) => {
+    userServices.addCount(req, err => err ? next(err) : res.json({ status: 'success addcount'}))
+  },
+  reduceCount: (req, res, next) => {
+    userServices.reduceCount(req, err => err ? next(err) : res.json({ status: 'success reduceCount' }))
+  },
   getCarts: (req, res, next) => {
     userServices.getCarts(req, (err, data) => err ? next(err) : res.json({ status: 'success 取得購物車', data }))
   },

@@ -36,9 +36,13 @@ router.post('/foverite/:productId', authenticated, userController.addFavorite)
 router.delete('/foverite/:productId', authenticated, userController.removeFavorite)
 
 // Cart
-router.get('/carts', authenticated, userController.getCarts)
+// router.get('/carts', authenticated, userController.getCarts)
 router.post('/cart/:productId', authenticated, userController.addCart)
 router.delete('/cart/:productId', authenticated, userController.removeCart)
+
+// ProductCount
+router.post('/cart-add-count/:productId', authenticated, userController.addCount)
+router.post('/cart-reduce-count/:productId', authenticated, userController.reduceCount)
 
 router.use('/', apiErrorHandler)
 

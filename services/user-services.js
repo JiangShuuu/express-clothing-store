@@ -172,31 +172,63 @@ const userServices = {
       .then(() => cb(null, {}))
       .catch(err => cb(err))
   },
-  getCarts: async (req, cb) => {
-    const userId = req.user.id
-    let products = []
-    const carts = await Cart.findAll({
-      raw: true,
-      where: { userId: `${userId}` },
-    })
-      .then(cart => {
-        return cart
+  addCount: (req, cb) => {
+    const { productId } = req.params
+    return Cart.findOne({
+        where: {
+          userId: req.user.id,
+          productId,
+        },
       })
-      .catch(err => cb(err))
-    
-    carts.map(items => {
-      Product.findByPk(items.productId, {
-        raw: true
-      })
-        .then(product => {
-          products.push(product)
+        .then(cart => {
+          if (!cart) throw new Error ("You're Cart haven't add this Product!")
+
+          cart.increment('productCount')
         })
+        .then(() => cb(null, {}))
         .catch(err => cb(err))
-    })
-    // 異步問題, 拿不到資料
-    console.log(products)
-    await cb(null, { products })
+  },
+  reduceCount: (req, cb) => {
+    const { productId } = req.params
+    return Cart.findOne({
+        where: {
+          userId: req.user.id,
+          productId,
+        },
+      })
+        .then(cart => {
+          if (!cart) throw new Error ("You're Cart haven't add this Product!")
+          if (cart.productCount === 0) throw new Error ("不能再扣拉！")
+          cart.decrement('productCount')
+        })
+        .then(() => cb(null, {}))
+        .catch(err => cb(err))
   }
+  // getCarts: async (req, cb) => {
+  //   const userId = req.user.id
+  //   let products = []
+  //   const carts = await Cart.findAll({
+  //     raw: true,
+  //     where: { userId: `${userId}` },
+  //   })
+  //     .then(cart => {
+  //       return cart
+  //     })
+  //     .catch(err => cb(err))
+    
+  //   carts.map(items => {
+  //     Product.findByPk(items.productId, {
+  //       raw: true
+  //     })
+  //       .then(product => {
+  //         products.push(product)
+  //       })
+  //       .catch(err => cb(err))
+  //   })
+  //   // 異步問題, 拿不到資料
+  //   console.log(products)
+  //   await cb(null, { products })
+  // }
 }
 
 module.exports = userServices
