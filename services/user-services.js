@@ -43,7 +43,7 @@ const userServices = {
   getCurrentUser: async (req, cb) => {
     try {
       const userId = req.user.id
-      const currentUser = await User.findByPk(userId, {
+      const { CartProducts, email, id, isAdmin, name } = await User.findByPk(userId, {
         include: [
           { model: Product, as: 'CartProducts' }
         ],
@@ -54,7 +54,8 @@ const userServices = {
           'isAdmin'
         ],
       })
-      cb(null, currentUser)
+      const userData = { email, id, isAdmin, name }
+      cb(null, {user: { userData, CartProducts }})
     } catch (err) {
       cb(err)
     }
