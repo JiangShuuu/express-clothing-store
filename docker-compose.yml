@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - .:/app
+      - '/app/node_modules'
+    depends_on:
+      - mysql_server
+    environment:
+      - JWT_SECRET=alphacamp
+      - IMGUR_CLIENT_ID=483a88d6de32984
+      - NODE_ENV=production
+  
+  mysql_server:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=clothes_db
+      - MYSQL_USER=dan
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=secret
