@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "password",
-    "database": "clothing_store",
-    "host": "127.0.0.1",
+    "username": "dan",
+    "password": "secret",
+    "database": "test_db",
+    "host": "mysql_server",
     "dialect": "mysql"
   },
   "test": {
@@ -14,6 +14,9 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "CLEARDB_DATABASE_URL"
+    "host": "mysql_server",
+    "user": "dan",
+    "password": "secret",
+    "database": "test_db"
   }
 }
