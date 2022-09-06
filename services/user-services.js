@@ -219,10 +219,55 @@ const userServices = {
           cb(null, { orders })
         })
         .catch(err => cb(err))
+  },
+  addOrder: (req, cb) => {
+    const { name, phone, address, total, productsId } = req.body
+    const userId = req.user.id
+    Order.create({ 
+      name,
+      phone,
+      address,
+      total,
+      userId
+    })
+      .then((order) => {
+        for(i=0; i < productsId.length; i++) {
+          Orderlist.create({
+            orderId: order.id,
+            productId: productsId[i],
+          })
+        }
+      })
+      .then(() => cb(null))
+      .catch(err => cb(err))
+  },
+  deleteOrder: (req, cb) => {
+    const { orderId } = req.params
+    console.log('aab', orderId)
+    return Promise.all([
+      Order.findOne({
+        where: {
+          userId: req.user.id,
+          id: orderId
+        }
+      }),
+      Orderlist.findAll({
+        where: {
+          orderId
+        }
+      })
+    ])
+      .then(([order, orderlist]) => {
+        if (!order) throw new Error ("Order didn't exist!")
+        order.destroy()
+        for (i=0; i < orderlist.length; i++) {
+          orderlist[i].destroy()
+        }
+      })
+      .then(() => cb(null))
+      .catch((err) => cb(err))
   }
-  // addOrder: (req, cb) => {
-  //   return
-  // }
+
   // getCarts: async (req, cb) => {
   //   const userId = req.user.id
   //   let products = []

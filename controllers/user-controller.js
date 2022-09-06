@@ -42,6 +42,12 @@ const userController = {
   },
   getOrders: (req, res, next) => {
     userServices.getOrders(req, (err, data) => err ? next(err): res.json({ status: 'success get', data }))
+  },
+  addOrder: (req, res, next) => {
+    userServices.addOrder(req, (err, data) => err ? next(err): res.json({ status: 'success create' }))
+  },
+  deleteOrder: (req, res, next) => {
+    userServices.deleteOrder(req, err => err ? next(err): res.json({ status: 'seccess delete' }))
   }
 }
 module.exports = userController
