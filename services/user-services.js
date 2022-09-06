@@ -206,7 +206,7 @@ const userServices = {
         .catch(err => cb(err))
   },
   getOrders: (req, cb) => {
-    return Order.findOne({ 
+    return Order.findAll({ 
         include: [
           { model: Product, as: 'OrderProducts' }
         ],
