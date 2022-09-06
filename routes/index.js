@@ -8,6 +8,7 @@ const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
 const admin = require('./modules/admin')
 const auth = require('./modules/auth')
+const userServices = require('../services/user-services')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 router.use('/auth', auth)
@@ -43,6 +44,9 @@ router.delete('/cart/:productId', authenticated, userController.removeCart)
 // ProductCount
 router.post('/cart-add-count/:productId', authenticated, userController.addCount)
 router.post('/cart-reduce-count/:productId', authenticated, userController.reduceCount)
+
+// Order
+router.get('/get-orders', userController.getOrders)
 
 router.use('/', apiErrorHandler)
 

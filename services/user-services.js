@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, Comment, Product, Favorite, Cart } = db
+const { User, Comment, Product, Favorite, Cart, Order } = db
 
 const userServices = {
   signIn: async (req, cb) => {
@@ -204,6 +204,14 @@ const userServices = {
         })
         .then(() => cb(null, {}))
         .catch(err => cb(err))
+  },
+  getOrders: (req, cb) => {
+    return Promise.all([
+      Order.findAll({ raw: true }),
+      req.params.id ? Order.findByPk(req.params.id, { raw: true }) : null
+    ])
+      .then(([orders, order]) => cb(null, { orders, order } ))
+      .catch(err => cb(err))
   }
   // getCarts: async (req, cb) => {
   //   const userId = req.user.id

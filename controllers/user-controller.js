@@ -39,6 +39,9 @@ const userController = {
   },
   getCurrentUser: (req, res, next) => {
     userServices.getCurrentUser(req, (err, data) => err ? next(err) : res.json({ status: 'success 取得使用者資料', data }))
+  },
+  getOrders: (req, res, next) => {
+    userServices.getOrders(req, (err, data) => err ? next(err): res.json({ status: 'success get', data }))
   }
 }
 module.exports = userController

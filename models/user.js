@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.Comment, { foreignKey: 'userId' })
-
+      User.hasMany(models.Order, { foreignKey: 'userId' })
       // 多對多
       User.belongsToMany(models.Product, {
         through: models.Favorite,
