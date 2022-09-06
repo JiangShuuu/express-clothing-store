@@ -231,19 +231,18 @@ const userServices = {
       userId
     })
       .then((order) => {
-        for(i=0; i < productsId.length; i++) {
+        productsId.map(item => {
           Orderlist.create({
             orderId: order.id,
-            productId: productsId[i],
+            productId: item,
           })
-        }
+        })
       })
       .then(() => cb(null))
       .catch(err => cb(err))
   },
   deleteOrder: (req, cb) => {
     const { orderId } = req.params
-    console.log('aab', orderId)
     return Promise.all([
       Order.findOne({
         where: {
@@ -260,9 +259,9 @@ const userServices = {
       .then(([order, orderlist]) => {
         if (!order) throw new Error ("Order didn't exist!")
         order.destroy()
-        for (i=0; i < orderlist.length; i++) {
-          orderlist[i].destroy()
-        }
+        orderlist.map(item => {
+          item.destroy()
+        })
       })
       .then(() => cb(null))
       .catch((err) => cb(err))
