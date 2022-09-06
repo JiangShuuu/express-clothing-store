@@ -206,16 +206,19 @@ const userServices = {
         .catch(err => cb(err))
   },
   getOrders: (req, cb) => {
-    return Promise.all([
-      Order.findAll({ 
+    return Order.findOne({ 
         include: [
           { model: Product, as: 'OrderProducts' }
         ],
-      }),
-      req.params.id ? Order.findByPk(req.params.id, { raw: true }) : null
-    ])
-      .then(([orders, order]) => cb(null, { orders, order } ))
-      .catch(err => cb(err))
+        where: {
+          userId: req.user.id
+        }
+      })
+        .then((orders) => {
+          if (!orders) throw new Error ("order didn't exist!")
+          cb(null, { orders })
+        })
+        .catch(err => cb(err))
   }
   // addOrder: (req, cb) => {
   //   return
