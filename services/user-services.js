@@ -221,7 +221,7 @@ const userServices = {
         .catch(err => cb(err))
   },
   addOrder: (req, cb) => {
-    const { name, phone, address, total, productsId } = req.body
+    const { name, phone, address, total } = req.body
     const userId = req.user.id
     Cart.findAll({
       where: {
@@ -243,6 +243,7 @@ const userServices = {
               Orderlist.create({
                 orderId: order.id,
                 productId: item.productId,
+                productCount: item.productCount
               })
               item.destroy()
             })
