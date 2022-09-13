@@ -223,20 +223,30 @@ const userServices = {
   addOrder: (req, cb) => {
     const { name, phone, address, total, productsId } = req.body
     const userId = req.user.id
-    Order.create({ 
-      name,
-      phone,
-      address,
-      total,
-      userId
+    Cart.findAll({
+      where: {
+        userId
+      }
     })
-      .then((order) => {
-        productsId.map(item => {
-          Orderlist.create({
-            orderId: order.id,
-            productId: item,
-          })
+      .then((cart) => {
+        if (cart.length < 1) throw new Error ("Cart didn't have any Product!")
+
+        Order.create({ 
+          name,
+          phone,
+          address,
+          total,
+          userId
         })
+          .then((order) => {
+            cart.map(item => {
+              Orderlist.create({
+                orderId: order.id,
+                productId: item.productId,
+              })
+              item.destroy()
+            })
+          })
       })
       .then(() => cb(null))
       .catch(err => cb(err))
