@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.addColumn('Carts', 'product_count', {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 1
     }, {})
   },
 
