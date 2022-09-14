@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User, Comment, Product, Favorite, Cart, Order, Orderlist } = db
 
+const BCRYPT_COMPLEXITY = 10
+
 const userServices = {
   signIn: async (req, cb) => {
     try {
@@ -30,7 +32,7 @@ const userServices = {
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
         if (user) throw new Error('Email already exists!')
-        return bcrypt.hash(req.body.password, 10)
+        return bcrypt.hash(req.body.password, BCRYPT_COMPLEXITY)
       })
       .then(hash => User.create({
         name: req.body.name,
@@ -84,18 +86,17 @@ const userServices = {
   putUser: (req, cb) => {
     const { name, email, password } = req.body
     if (!email) throw new Error('User email is required!')
-
     User.findByPk(req.params.id)
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
         return user.update({
           name,
           email,
-          password
+          password: bcrypt.hashSync(password, BCRYPT_COMPLEXITY)
         })
       })
-      .then(updateUser => cb(null, { updateUser }))
-      .catch(err => cb(err))
+        .then(updateUser => cb(null, { updateUser }))
+        .catch(err => cb(err))
   },
   addFavorite: (req, cb) => {
     const { productId } = req.params
