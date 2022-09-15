@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 
 const productServices = {
   getProducts: (req, cb) => {
-    const DEFAULT_LIMIT = 9
+    const DEFAULT_LIMIT = 8
     const categoryId = Number(req.query.categoryId) || ''
     const page = Number(req.query.page) || 1
     const limit = Number(req.query.limit) || DEFAULT_LIMIT
