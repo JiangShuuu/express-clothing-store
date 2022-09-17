@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    ## image: globelex/expre:1.0
     build:
       context: .
       dockerfile: Dockerfile
