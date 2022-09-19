@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 const productServices = {
   searchProducts: (req, cb) => {
     const keyword = req.query.keyword
+
     Product.findAll({
       raw: true,
       attributes: [
@@ -19,7 +20,7 @@ const productServices = {
     })
       .then(products => {
          const items = products.filter(item => {
-          return item.title.includes.toLowerCase()(keyword.toLowerCase())
+          return item.title.toLowerCase().includes(keyword.toLowerCase())
         })
         cb(null, { products: items })
       })
