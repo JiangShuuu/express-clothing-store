@@ -19,9 +19,9 @@ const productServices = {
     })
       .then(products => {
          const items = products.filter(item => {
-          return item.title.includes(keyword)
+          return item.title.includes.toLowerCase()(keyword.toLowerCase())
         })
-        cb(null, items)
+        cb(null, { products: items })
       })
       .catch(err => {
         cb(err)
