@@ -1,6 +1,9 @@
 const productServices = require('../services/product-services')
 
 const productController = {
+  searchProducts: (req, res, next) => {
+    productServices.searchProducts(req, (err, data) => err ? next(err) : res.json({ status: 'success getSearch', data }))
+  },
   getProducts: (req, res, next) => {
     productServices.getProducts(req, (err, data) => err ? next(err) : res.json({ status: 'success getAll', data }))
   },

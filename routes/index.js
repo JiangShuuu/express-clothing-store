@@ -21,6 +21,7 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 router.get('/current_user', authenticated, userController.getCurrentUser)
 
 // Product
+router.get('/products/search', authIsUser, productController.searchProducts)
 router.get('/products/top', authIsUser, productController.getTopProducts)
 router.get('/products', authIsUser, productController.getProducts)
 router.get('/product/:id', authIsUser, productController.getProduct)

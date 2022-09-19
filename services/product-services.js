@@ -4,6 +4,29 @@ const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const Sequelize = require('sequelize');
 
 const productServices = {
+  searchProducts: (req, cb) => {
+    const keyword = req.query.keyword
+    Product.findAll({
+      raw: true,
+      attributes: [
+        'id',
+        'title',
+        'price',
+        'og_price',
+        'image',
+        'short_intro'
+      ]
+    })
+      .then(products => {
+         const items = products.filter(item => {
+          return item.title.includes(keyword)
+        })
+        cb(null, items)
+      })
+      .catch(err => {
+        cb(err)
+      })
+  },
   getProducts: (req, cb) => {
     const DEFAULT_LIMIT = 8
     const categoryId = Number(req.query.categoryId) || ''
