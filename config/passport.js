@@ -21,12 +21,24 @@ passport.use(new LocalStrategy(
     passReqToCallback: true
   },
   // authenticate user
+  
   (req, email, password, cb) => {
+    const error = new Error()
     User.findOne({ where: { email } })
       .then(user => {
-        if (!user) throw new Error ("帳號或密碼輸入錯誤！")
+        
+        if (!user) {
+          error.code = 400
+          error.message = "帳號或密碼輸入錯誤！"
+          return cb(error)
+        } 
+
         bcrypt.compare(password, user.password).then(res => {
-          if (!res) throw new Error ("帳號或密碼輸入錯誤！")
+          if (!res) {
+            error.code = 400
+            error.message = "帳號或密碼輸入錯誤！"
+            return cb(error)
+          } 
           return cb(null, user)
         })
           .catch(err => cb(err))

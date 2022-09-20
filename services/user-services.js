@@ -63,6 +63,7 @@ const userServices = {
     }
   },
   getUser: (req, cb) => {
+    const error = new Error()
     User.findByPk(req.params.id, {
       include: [
         Comment,
@@ -71,7 +72,11 @@ const userServices = {
       ]
     })
       .then(user => {
-        if (!user) throw new Error ("User didn't exist!")
+        if (!user) {
+          error.code = 400
+          error.message = ("使用者不存在!")
+          return cb(error)
+        }
         delete user.password
 
         cb(null, { user })

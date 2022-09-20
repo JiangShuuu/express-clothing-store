@@ -1,20 +1,23 @@
 module.exports = {
-  apiErrorHandler (err, req, res, next) {
+  apiErrorHandler (error, req, res, next) {
+    const errorCode = error.code
+
     // 用 instanceof 判斷傳入 err 是否為物件.
-    if (err instanceof Error) {
+    if (error instanceof Error) {
       // 如果是, 則取 err 物件內的 name, message.
-      res.status(500).json({
+      res.status(errorCode).json({
+        error: errorCode,
         status: 'error',
-        message: `${err.name}: ${err.message}`
+        message: `${error.name}: ${error.message}`
       })
     } else {
       // 若不是, 則直接印出.
       res.status(500).json({
         status: 'error',
-        message: `${err}`
+        message: `${error}`
       })
     }
     // 把 err 傳給下一個 error handler.
-    next(err)
+    next(error)
   }
 }
