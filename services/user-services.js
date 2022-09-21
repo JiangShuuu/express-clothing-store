@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 const { User, Comment, Product, Favorite, Cart, Order, Orderlist } = db
 
 const BCRYPT_COMPLEXITY = 10
@@ -27,7 +28,7 @@ const userServices = {
       cb(error)
     }
   },
-  signUp: (req, cb) => {
+  signUp: (req, cb) => { 
 
     if (req.body.password !== req.body.passwordCheck) {
       error.code = 400
@@ -47,10 +48,11 @@ const userServices = {
       .then(hash => User.create({
         name: req.body.name,
         email: req.body.email,
+        avatar: "https://res.cloudinary.com/dqfxgtyoi/image/upload/v1646039874/twitter/project/defaultAvatar_a0hkxw.png",
         password: hash
       }))
       .then((newUser) => cb(null, { user: newUser}))
-      .catch(error => {
+      .catch((error) => {
         error.code = 500
         cb(error)
       })
@@ -116,30 +118,31 @@ const userServices = {
       return cb(error)
     }
 
-    User.findByPk(req.params.id)
-      .then(user => {
-
+    Promise.all([
+      User.findByPk(req.params.id),
+      imgurFileHandler(file)
+    ])
+      .then(([user, filePath]) => {
         if (!user) {
           error.code = 400
           error.message = "User 不存在!"
           return cb(error)
         }
-
         return user.update({
           name,
           email,
+          avatar: filePath || "https://res.cloudinary.com/dqfxgtyoi/image/upload/v1646039874/twitter/project/defaultAvatar_a0hkxw.png",
           password: bcrypt.hashSync(password, BCRYPT_COMPLEXITY)
         })
-
       })
         .then(updateUser => cb(null, { updateUser }))
         .catch(error => {
           error.code = 500
-          cb(error)
+          return cb(error)
         })
   },
   addFavorite: (req, cb) => {
-
+    const error = new Error()
     return Promise.all([
       Product.findByPk(productId),
       Favorite.findOne({
@@ -150,7 +153,7 @@ const userServices = {
       })
     ])
       .then(([product, favorite]) => {
-
+        console.log(product)
         if (!product) {
           error.code = 400
           error.message = "此商品不存在!"
