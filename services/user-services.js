@@ -139,7 +139,7 @@ const userServices = {
         })
       })
         .then(updateUser => {
-          
+
           const userData = updateUser.toJSON()
           delete userData.password
 
@@ -151,9 +151,8 @@ const userServices = {
         })
   },
   addFavorite: (req, cb) => {
-    const error = new Error()
     return Promise.all([
-      Product.findByPk(productId),
+      Product.findByPk(req.params.id),
       Favorite.findOne({
         where: {
           userId: req.user.id,
@@ -162,7 +161,6 @@ const userServices = {
       })
     ])
       .then(([product, favorite]) => {
-        console.log(product)
         if (!product) {
           error.code = 400
           error.message = "此商品不存在!"
@@ -177,7 +175,7 @@ const userServices = {
 
         return Favorite.create({
           userId: req.user.id,
-          productId
+          productId: req.params.id
         })
       })
       .then(() => cb(null))
