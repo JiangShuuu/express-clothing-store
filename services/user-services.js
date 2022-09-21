@@ -256,11 +256,11 @@ const userServices = {
       })
   },
   addCount: (req, cb) => {
-    const { productId } = req.params
+
     return Cart.findOne({
         where: {
           userId: req.user.id,
-          productId,
+          productId: req.params.id,
         },
       })
         .then(cart => {
@@ -281,12 +281,10 @@ const userServices = {
   },
   reduceCount: (req, cb) => {
 
-    const { productId } = req.params
-
     return Cart.findOne({
         where: {
           userId: req.user.id,
-          productId,
+          productId: req.params.id,
         },
       })
         .then(cart => {

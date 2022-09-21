@@ -2,6 +2,7 @@ const { Product, Category, Comment, User, Favorite } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const Sequelize = require('sequelize');
+const error = new Error()
 
 const productServices = {
   searchProducts: (req, cb) => {
@@ -19,13 +20,21 @@ const productServices = {
       ]
     })
       .then(products => {
-         const items = products.filter(item => {
+
+          if (!products) {
+            error.code = 400
+            error.message = "查無商品!"
+            return cb(error)
+          }
+
+          const items = products.filter(item => {
           return item.title.toLowerCase().includes(keyword.toLowerCase())
         })
         cb(null, { products: items })
       })
-      .catch(err => {
-        cb(err)
+      .catch(error => {
+        error.code = 500
+        cb(error)
       })
   },
   getProducts: (req, cb) => {
@@ -58,6 +67,12 @@ const productServices = {
         let FavoritedProductsId
         let CartProductsId
 
+        if (!products || !categories) {
+          error.code = 400
+          error.message = "找不到商品, 稍後重新查詢"
+          return cb(error)
+        }
+
         if(req.user) {
           FavoritedProductsId = req.user && req.user.FavoritedProducts.map(fr => fr.id)
           CartProductsId = req.user && req.user.CartProducts.map(fr => fr.id)
@@ -77,7 +92,10 @@ const productServices = {
           pagination: getPagination(limit, page, products.count)
         })
       })
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   getProduct: (req, cb) => {
     return Product.findByPk(req.params.id, {
@@ -89,7 +107,12 @@ const productServices = {
       ]
     })
       .then(product => {
-        if (!product) throw new Error ("Product didn't exist!")
+
+        if (!product) {
+          error.code = 400
+          error.message = "商品不存在!"
+          return cb(error)
+        }
 
         product.increment('viewCounts')
 
@@ -105,13 +128,22 @@ const productServices = {
 
         }
       })
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   postProduct: (req, cb) => {
     const { title, price, og_price, short_intro, description, categoryId } = req.body  
-    if (!title) throw new Error('title name is required!')
+    
+    if (!title) {
+      error.code = 400
+      error.message = "title 為必填!"
+      return cb(error)
+    }
 
     const { file } = req
+
     imgurFileHandler(file)
       .then(filePath => Product.create({ 
         title,
@@ -123,7 +155,10 @@ const productServices = {
         categoryId
       }))
       .then((newProduct) => cb(null, { product: newProduct }))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   editProduct: (req, cb) => {
     Promise.all([
@@ -131,11 +166,19 @@ const productServices = {
       Category.findAll({ raw: true })
     ])
       .then(([product, categories]) => cb(null, { product, categories }))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   putProduct: (req, cb) => {
     const { title, price, og_price, short_intro, description, categoryId } = req.body
-    if (!title) throw new Error('Product title is required!')
+
+    if (!title) {
+      error.code = 400
+      error.message = "title 為必填!"
+      return cb(error)
+    }
 
     const { file } = req
 
@@ -144,7 +187,13 @@ const productServices = {
       imgurFileHandler(file)
     ])
       .then(([product, filePath]) => {
-        if (!product) throw new Error("Product didn't exist!")
+
+        if (!product) {
+          error.code = 400
+          error.message = "商品不存在!"
+          return cb(error)
+        }
+
         return product.update({
           title,
           price,
@@ -156,16 +205,28 @@ const productServices = {
         })
       })
       .then((updateProduct) => cb(null, {product: updateProduct}))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   deleteProduct: (req, cb) => {
     return Product.findByPk(req.params.id)
       .then(product => {
-        if (!product) throw new Error("Product didn't exist!")
+
+        if (!product) {
+          error.code = 400
+          error.message = "商品不存在!"
+          return cb(error)
+        }
+
         return product.destroy()
       })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   // Feeds
   getFeeds: (req, cb) => {
@@ -188,7 +249,10 @@ const productServices = {
       .then(([products, comments]) => {
         cb(null, {products, comments})
       })
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   getTopProducts: (req, cb) => {
     return Favorite.findAll({
@@ -198,13 +262,18 @@ const productServices = {
       limit: 10,
       raw: true,
       
-    }).then(result => {
-      const top = result.map(product => ({
-        ...product,
-        isFavorited: req.user && req.user.FavoritedProducts?.some(l => l.id === product.product_id)
-      })) 
-      cb(null, { top })
-    }).catch(err => cb(err))
+    })
+      .then(result => {
+        const top = result.map(product => ({
+          ...product,
+          isFavorited: req.user && req.user.FavoritedProducts?.some(l => l.id === product.product_id)
+        })) 
+        cb(null, { top })
+      })
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   }
 }
 
