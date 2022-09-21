@@ -1,6 +1,7 @@
 const db = require('../models')
 const { User, Category, Product } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const error = new Error()
 
 const adminServices = {
   // User
@@ -10,14 +11,24 @@ const adminServices = {
       raw: true
     })
       .then(users => cb(null, { users }))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   patchUser: (req, cb) => {
     User.findByPk(req.params.id)
       .then(user => {
-        if (!user) throw new Error("User didn't exist!")
+        if (!user) {
+          error.code = 400
+          error.message = "使用者不存在!"
+          return cb(error)
+        }
+
         if (user.email === 'root@example.com') {
-          throw new Error("root can't not change!")
+          error.code = 400
+          error.message = "root不能更改!"
+          return cb(error)
         }
 
         user.isAdmin === false ? user.isAdmin = true : user.isAdmin = false
@@ -27,7 +38,10 @@ const adminServices = {
         })
       })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
 
   // Category
@@ -37,34 +51,68 @@ const adminServices = {
       req.params.id ? Category.findByPk(req.params.id, { raw: true }) : null
     ])
       .then(([categories, category]) => cb(null, { categories, category } ))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   postCategory: (req, cb) => {
     const { name } = req.body
-    if (!name) throw new Error('Category name is required!')
+    if (!name) {
+      error.code = 400
+      error.message = "名稱為必填!"
+      return cb(error)
+    }
     return Category.create({ name })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   putCategory: (req, cb) => {
     const { name } = req.body
-    if (!name) throw new Error('Category name is required!')
+
+    if (!name) {
+      error.code = 400
+      error.message = "名稱為必填!"
+      return cb(error)
+    }
+
     return Category.findByPk(req.params.id)
       .then(category => {
-        if (!category) throw new Error ("category doesn't exist!")
+
+        if (!category) {
+          error.code = 400
+          error.message = "類別不存在!"
+          return cb(error)
+        }
+
         return category.update({ name })
       })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        return cb(error)
+      })
   },
   deleteCategory: (req, cb) => {
     return Category.findByPk(req.params.id)
       .then(category => {
-        if (!category) throw new Error("Category didn't exist!")
+
+        if (!category) {
+          error.code = 400
+          error.message = "類別不存在!"
+          return cb(error)
+        }
+
         return category.destroy()
       })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
 
   // Product
@@ -101,7 +149,10 @@ const adminServices = {
           categoryId,
         })
       })
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(err)
+      })
   }
 }
 
