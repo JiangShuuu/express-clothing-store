@@ -139,13 +139,13 @@ const userServices = {
         })
   },
   addFavorite: (req, cb) => {
-    const { productId } = req.params
+
     return Promise.all([
       Product.findByPk(productId),
       Favorite.findOne({
         where: {
           userId: req.user.id,
-          productId
+          productId: req.params.id
         }
       })
     ])
@@ -178,7 +178,7 @@ const userServices = {
     return Favorite.findOne({
       where: {
         userId: req.user.id,
-        productId: req.params.productId
+        productId: req.params.id
       }
     })
       .then(favorite => {
@@ -198,13 +198,12 @@ const userServices = {
       })
   },
   addCart: (req, cb) => {
-    const { id } = req.params
     return Promise.all([
       Product.findByPk(id),
       Cart.findOne({
         where: {
           userId: req.user.id,
-          productId: id
+          productId: req.params.id
         }
       })
     ])

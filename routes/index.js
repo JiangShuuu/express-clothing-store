@@ -34,8 +34,8 @@ router.post('/comments', authenticated, commentController.postComment)
 router.get('/products/feeds', productController.getFeeds)
 
 // Favorite
-router.post('/foverite/:productId', authenticated, userController.addFavorite)
-router.delete('/foverite/:productId', authenticated, userController.removeFavorite)
+router.post('/foverite/:id', authenticated, userController.addFavorite)
+router.delete('/foverite/:id', authenticated, userController.removeFavorite)
 
 // Cart
 // router.get('/carts', authenticated, userController.getCarts)
@@ -43,8 +43,8 @@ router.post('/cart/:id', authenticated, userController.addCart)
 router.delete('/cart/:id', authenticated, userController.removeCart)
 
 // ProductCount
-router.post('/cart-add-count/:productId', authenticated, userController.addCount)
-router.post('/cart-reduce-count/:productId', authenticated, userController.reduceCount)
+router.post('/cart-add-count/:id', authenticated, userController.addCount)
+router.post('/cart-reduce-count/:id', authenticated, userController.reduceCount)
 
 // Order
 router.get('/orders', authenticated, userController.getOrders)
