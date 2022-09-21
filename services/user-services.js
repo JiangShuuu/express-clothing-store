@@ -4,6 +4,7 @@ const db = require('../models')
 const { User, Comment, Product, Favorite, Cart, Order, Orderlist } = db
 
 const BCRYPT_COMPLEXITY = 10
+const error = new Error()
 
 const userServices = {
   signIn: async (req, cb) => {
@@ -21,17 +22,26 @@ const userServices = {
       const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
 
       cb(null, { token, user: { userData, CartProducts } })
-    } catch (err) {
-      cb(err)
+    } catch (error) {
+      error.code = 500
+      cb(error)
     }
   },
   signUp: (req, cb) => {
 
-    if (req.body.password !== req.body.passwordCheck) throw new Error('Passwords do not match!')
+    if (req.body.password !== req.body.passwordCheck) {
+      error.code = 400
+      error.message = '兩次 Passwords 不相符, 請重新確認!'
+      return cb(error)
+    }
 
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
-        if (user) throw new Error('Email already exists!')
+        if (user) {
+          error.code = 400
+          error.message = 'Email 已存在, 請重新輸入!'
+          return cb(error)
+        }
         return bcrypt.hash(req.body.password, BCRYPT_COMPLEXITY)
       })
       .then(hash => User.create({
@@ -40,7 +50,10 @@ const userServices = {
         password: hash
       }))
       .then((newUser) => cb(null, { user: newUser}))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   getCurrentUser: async (req, cb) => {
     try {
@@ -58,12 +71,12 @@ const userServices = {
       })
       const userData = { email, id, isAdmin, name }
       cb(null, {user: { userData, CartProducts }})
-    } catch (err) {
-      cb(err)
+    } catch (error) {
+      error.code = 500
+      cb(error)
     }
   },
   getUser: (req, cb) => {
-    const error = new Error()
     User.findByPk(req.params.id, {
       include: [
         Comment,
@@ -81,27 +94,49 @@ const userServices = {
 
         cb(null, { user })
       })
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   editUser: (req, cb) => {
     User.findByPk(req.params.id, { raw: true })
       .then(user => cb(null, { user }))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   putUser: (req, cb) => {
     const { name, email, password } = req.body
-    if (!email) throw new Error('User email is required!')
+
+    if (!email) {
+      error.code = 400
+      error.message = "User email 為必填!"
+      return cb(error)
+    }
+
     User.findByPk(req.params.id)
       .then(user => {
-        if (!user) throw new Error("User didn't exist!")
+
+        if (!user) {
+          error.code = 400
+          error.message = "User 不存在!"
+          return cb(error)
+        }
+
         return user.update({
           name,
           email,
           password: bcrypt.hashSync(password, BCRYPT_COMPLEXITY)
         })
+
       })
         .then(updateUser => cb(null, { updateUser }))
-        .catch(err => cb(err))
+        .catch(error => {
+          error.code = 500
+          cb(error)
+        })
   },
   addFavorite: (req, cb) => {
     const { productId } = req.params
@@ -115,8 +150,18 @@ const userServices = {
       })
     ])
       .then(([product, favorite]) => {
-        if (!product) throw new Error ("Product didn't exist!")
-        if (favorite) throw new Error ("You have favorited this Product!")
+
+        if (!product) {
+          error.code = 400
+          error.message = "此商品不存在!"
+          return cb(error)
+        }
+
+        if (favorite) {
+          error.code = 400
+          error.message = "此商品已存在喜歡名單!"
+          return cb(error)
+        }
 
         return Favorite.create({
           userId: req.user.id,
@@ -124,7 +169,10 @@ const userServices = {
         })
       })
       .then(() => cb(null))
-      .catch((err) => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   removeFavorite: (req, cb) => {
     return Favorite.findOne({
@@ -134,12 +182,20 @@ const userServices = {
       }
     })
       .then(favorite => {
-        if (!favorite) throw new Error("You haven't favorited this Product!")
+
+        if (!favorite) {
+          error.code = 400
+          error.message = "此商品不存在喜歡名單中!"
+          return cb(error)
+        }
 
         return favorite.destroy()
       })
       .then(() => cb(null, {}))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   addCart: (req, cb) => {
     const { productId } = req.params
@@ -153,8 +209,17 @@ const userServices = {
       })
     ])
       .then(([product, cart]) => {
-        if (!product) throw new Error ("Product didn't exist!")
-        if (cart) throw new Error ("You're Cart have this Product!")
+        if (!product) {
+          error.code = 400
+          error.message = "此商品不存在!"
+          return cb(error)
+        } 
+        
+        if (cart) {
+          error.code = 400
+          error.message = "此商品已加入購物車!"
+          return cb(error)
+        }
 
         return Cart.create({
           userId: req.user.id,
@@ -162,7 +227,10 @@ const userServices = {
         })
       })
       .then(() => cb(null, {}))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   removeCart: (req, cb) => {
     return Cart.findOne({
@@ -172,12 +240,20 @@ const userServices = {
       }
     })
       .then(cart => {
-        if (!cart) throw new Error ("You're Cart haven't add this Product!")
+
+        if (!cart) {
+          error.code = 400
+          error.message = "您的購物車未加入此商品!"
+          return cb(error)
+        }
 
         return cart.destroy()
       })
       .then(() => cb(null, {}))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   addCount: (req, cb) => {
     const { productId } = req.params
@@ -188,15 +264,25 @@ const userServices = {
         },
       })
         .then(cart => {
-          if (!cart) throw new Error ("You're Cart haven't add this Product!")
+
+          if (!cart) {
+            error.code = 400
+            error.message = "您的購物車未加入此商品!"
+            return cb(error)
+          }
 
           cart.increment('productCount')
         })
         .then(() => cb(null, {}))
-        .catch(err => cb(err))
+        .catch(error => {
+          error.code = 500
+          cb(error)
+        })
   },
   reduceCount: (req, cb) => {
+
     const { productId } = req.params
+
     return Cart.findOne({
         where: {
           userId: req.user.id,
@@ -204,12 +290,26 @@ const userServices = {
         },
       })
         .then(cart => {
-          if (!cart) throw new Error ("You're Cart haven't add this Product!")
-          if (cart.productCount === 0) throw new Error ("不能再扣拉！")
+
+          if (!cart) {
+            error.code = 400
+            error.message = "您的購物車未加入此商品!"
+            return cb(error)
+          }
+
+          if (cart.productCount === 0) {
+            error.code = 400
+            error.message = "不能再扣拉!"
+            return cb(error)
+          }
+
           cart.decrement('productCount')
         })
         .then(() => cb(null, {}))
-        .catch(err => cb(err))
+        .catch(error => {
+          error.code = 500
+          cb(error)
+        })
   },
   getOrders: (req, cb) => {
     return Order.findAll({ 
@@ -221,21 +321,37 @@ const userServices = {
         }
       })
         .then((orders) => {
-          if (!orders) throw new Error ("order didn't exist!")
+          
+          if (!orders) {
+            error.code = 400
+            error.message = "訂單不存在!"
+            return cb(error)
+          }
+
           cb(null, { orders })
         })
-        .catch(err => cb(err))
+        .catch(error => {
+          error.code = 500
+          cb(error)
+        })
   },
   addOrder: (req, cb) => {
+
     const { name, phone, address, total } = req.body
     const userId = req.user.id
+
     Cart.findAll({
       where: {
         userId
       }
     })
       .then((cart) => {
-        if (cart.length < 1) throw new Error ("Cart didn't have any Product!")
+
+        if (cart.length < 1) {
+          error.code = 400
+          error.message = "購物車沒有任何商品!"
+          return cb(error)
+        }
 
         Order.create({ 
           name,
@@ -256,59 +372,46 @@ const userServices = {
           })
       })
       .then(() => cb(null))
-      .catch(err => cb(err))
+      .catch(error => {
+        error.code = 500
+        cb(error)
+      })
   },
   deleteOrder: (req, cb) => {
-    const { orderId } = req.params
+    const { id } = req.params
+    console.log('123', id)
     return Promise.all([
       Order.findOne({
         where: {
           userId: req.user.id,
-          id: orderId
+          id: id
         }
       }),
       Orderlist.findAll({
         where: {
-          orderId
+          id
         }
       })
     ])
       .then(([order, orderlist]) => {
-        if (!order) throw new Error ("Order didn't exist!")
+
+        if (!order || !orderlist) {
+          error.code = 400
+          error.message = "訂單不存在!"
+          return cb(error)
+        }
+
         order.destroy()
         orderlist.map(item => {
           item.destroy()
         })
       })
       .then(() => cb(null))
-      .catch((err) => cb(err))
+      .catch((error) => {
+        error.code = 500
+        cb(error)
+      })
   }
-
-  // getCarts: async (req, cb) => {
-  //   const userId = req.user.id
-  //   let products = []
-  //   const carts = await Cart.findAll({
-  //     raw: true,
-  //     where: { userId: `${userId}` },
-  //   })
-  //     .then(cart => {
-  //       return cart
-  //     })
-  //     .catch(err => cb(err))
-    
-  //   carts.map(items => {
-  //     Product.findByPk(items.productId, {
-  //       raw: true
-  //     })
-  //       .then(product => {
-  //         products.push(product)
-  //       })
-  //       .catch(err => cb(err))
-  //   })
-  //   // 異步問題, 拿不到資料
-  //   console.log(products)
-  //   await cb(null, { products })
-  // }
 }
 
 module.exports = userServices

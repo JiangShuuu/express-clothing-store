@@ -49,7 +49,7 @@ router.post('/cart-reduce-count/:productId', authenticated, userController.reduc
 // Order
 router.get('/orders', authenticated, userController.getOrders)
 router.post('/order', authenticated, userController.addOrder)
-router.delete('/order/:orderId', authenticated, userController.deleteOrder)
+router.delete('/order/:id', authenticated, userController.deleteOrder)
 
 router.use('/', apiErrorHandler)
 
