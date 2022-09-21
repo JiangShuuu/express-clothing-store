@@ -198,13 +198,13 @@ const userServices = {
       })
   },
   addCart: (req, cb) => {
-    const { productId } = req.params
+    const { id } = req.params
     return Promise.all([
-      Product.findByPk(productId),
+      Product.findByPk(id),
       Cart.findOne({
         where: {
           userId: req.user.id,
-          productId
+          productId: id
         }
       })
     ])
@@ -236,7 +236,7 @@ const userServices = {
     return Cart.findOne({
       where: {
         userId: req.user.id,
-        productId: req.params.productId
+        productId: req.params.id
       }
     })
       .then(cart => {
@@ -389,7 +389,7 @@ const userServices = {
       }),
       Orderlist.findAll({
         where: {
-          id
+          orderId: id
         }
       })
     ])

@@ -39,8 +39,8 @@ router.delete('/foverite/:productId', authenticated, userController.removeFavori
 
 // Cart
 // router.get('/carts', authenticated, userController.getCarts)
-router.post('/cart/:productId', authenticated, userController.addCart)
-router.delete('/cart/:productId', authenticated, userController.removeCart)
+router.post('/cart/:id', authenticated, userController.addCart)
+router.delete('/cart/:id', authenticated, userController.removeCart)
 
 // ProductCount
 router.post('/cart-add-count/:productId', authenticated, userController.addCount)
