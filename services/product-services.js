@@ -134,7 +134,7 @@ const productServices = {
       })
   },
   postProduct: (req, cb) => {
-    const { title, price, og_price, short_intro, description, categoryId } = req.body  
+    const { title, price, og_price, short_intro, description, categoryId } = req.body
     
     if (!title) {
       error.code = 400

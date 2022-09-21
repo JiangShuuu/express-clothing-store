@@ -117,12 +117,15 @@ const userServices = {
       error.message = "User email 為必填!"
       return cb(error)
     }
+ 
+    const { file } = req
 
     Promise.all([
       User.findByPk(req.params.id),
       imgurFileHandler(file)
     ])
       .then(([user, filePath]) => {
+   
         if (!user) {
           error.code = 400
           error.message = "User 不存在!"
@@ -131,11 +134,17 @@ const userServices = {
         return user.update({
           name,
           email,
-          avatar: filePath || "https://res.cloudinary.com/dqfxgtyoi/image/upload/v1646039874/twitter/project/defaultAvatar_a0hkxw.png",
+          avatar: filePath || user.avatar,
           password: bcrypt.hashSync(password, BCRYPT_COMPLEXITY)
         })
       })
-        .then(updateUser => cb(null, { updateUser }))
+        .then(updateUser => {
+          
+          const userData = updateUser.toJSON()
+          delete userData.password
+
+          cb(null, { updateUser: userData })
+        } )
         .catch(error => {
           error.code = 500
           return cb(error)

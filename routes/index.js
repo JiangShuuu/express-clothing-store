@@ -9,13 +9,14 @@ const commentController = require('../controllers/comment-controller')
 const admin = require('./modules/admin')
 const auth = require('./modules/auth')
 const userServices = require('../services/user-services')
+const upload = require('../middleware/multer')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 router.use('/auth', auth)
 
 // User
 router.get('/users/:id', userController.getUser)
-router.put('/users/:id', authenticated, userController.putUser)
+router.put('/users/:id', upload.single('avatar') , authenticated, userController.putUser)
 router.post('/users/register', userController.signUp)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn)
 router.get('/current_user', authenticated, userController.getCurrentUser)
