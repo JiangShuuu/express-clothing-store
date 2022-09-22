@@ -1,9 +1,9 @@
 # Clothes Store API
 
-本專案為前後分離協作，此API提供給 [twitter_project](https://github.com/JiangShuuu/vue3-clothingStore-ts) 使用。
+本專案為前後分離協作，此API提供給 [clothingStore](https://github.com/JiangShuuu/vue3-clothingStore-ts) 使用。
 
-[後端入口DEMO](https://express.jiangshuuu.com/)
-[專案成品DEMO](https://profile.jiangshuuu.com/)
+[後端入口DEMO](https://express.jiangshuuu.com/)  
+[專案成品DEMO](https://profile.jiangshuuu.com/)  
 [API 文件](https://xxxx.com)
 
 ## 產品功能
