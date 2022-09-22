@@ -8,7 +8,6 @@ const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
 const admin = require('./modules/admin')
 const auth = require('./modules/auth')
-const userServices = require('../services/user-services')
 const upload = require('../middleware/multer')
 
 router.use('/admin', authenticated, authenticatedAdmin, admin)
