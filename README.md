@@ -12,7 +12,7 @@
 - 訪客能分享連結
 - 會員能將商品加入購物車
 - 會員能新增/刪除訂單
-- 管理者能新增/刪除/修改商品
+- 管理者能新增/刪除/修改商品、類別
 - 管理者能管理訂單
 - 管理者能瀏覽用戶
 
@@ -136,7 +136,3 @@ Example app listening on port <PORT>
 - [nodemon](https://www.npmjs.com/package/nodemon)
 - [MySQL](https://www.mysql.com/)
 - [MySQL Workbench](https://dev.mysql.com/downloads/mysql/)
-
-## 開發人員
-[Eklipsorz](https://github.com/Eklipsorz)  
-[Yung-Che](https://github.com/Yung-Che)
