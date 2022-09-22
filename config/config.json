@@ -19,8 +19,5 @@
     "database": "clothes_db",
     "host": "mysql_server",
     "dialect": "mysql"
-  },
-  "productionForHeroku": {
-    "use_env_variable": "CLEARDB_DATABASE_URL"
   }
 }
