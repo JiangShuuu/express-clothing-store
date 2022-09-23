@@ -1,0 +1,57 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Clothes Store CRUD",
+    "description": "My Clothes Project Application API",
+    "license": {
+      "name": "前端連結",
+      "url": "https://profile.jiangshuuu.com"
+    }
+  },
+  "host": "localhost:8888",
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
+  "paths":{
+    "/users": { 
+          "get": { 
+              "tags":["Users"],
+              "summary":"取得所有使用者",
+              "responses":{
+                  "200":{
+                      "description":"OK",
+                      "schema":{
+                          "$ref":"#/definitions/Users"
+                        }
+                    }
+                }
+            },
+            "post": {},
+            "delete":{}, 
+            "put":{} 
+        }
+    },
+    "definitions":{
+        "Users": {
+            "required": [ "name", "id", "company" ],
+            "properties": {
+                "id": {
+                    "type":"number"
+                },
+                "age": {
+                    "type":"number"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "chi"
+                },
+                "company": {
+                    "type": "string"
+                }
+            }
+        }
+  }
+}
