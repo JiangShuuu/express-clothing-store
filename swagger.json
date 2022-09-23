@@ -16,39 +16,202 @@
   "produces": ["application/json"],
 
   "paths":{
-    "/users": { 
-          "get": { 
-              "tags":["Users"],
-              "summary":"取得所有使用者",
-              "responses":{
-                  "200":{
-                      "description":"OK",
-                      "schema":{
-                          "$ref":"#/definitions/Users"
+    "/signin": {
+        "post": {
+            "tags": ["/users"],
+            "summary": "登入",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "400": {
+                    "description": "帳號密碼輸入錯誤!"
+                }
+            }
+        }
+    },
+    "/users/register": {
+        "post": {
+            "tags":["/users"],
+            "summary":"註冊帳號",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "400": {
+                    "description": "信箱為必填!"
+                }
+            }
+        }
+    },
+    "/users:id": { 
+        "get": { 
+            "tags":["/users"],
+            "summary":"取得使用者",
+            "responses":{
+                "200":{
+                    "description": "success",
+                    "schema":{
+                        "$ref":"#/definitions/Users"
                         }
                     }
                 }
             },
-            "post": {},
-            "delete":{}, 
-            "put":{} 
+        "put":{
+            "tags":["/users"],
+            "summary": "更新使用者",
+            "responses": {
+                "200": {
+                    "description": "success",
+                    "schema": {
+                        "$ref":"#/definitions/Users"
+                    }
+                }
+            }
+        } 
+    },
+    "/current_user": {
+        "get": {
+            "tags": ["/users"],
+            "summary": "取得當前使用者",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
         }
+    },
+    "/products": {
+        "get": {
+            "tags": ["/products"],
+            "summary": "取得所有商品",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/products/search": {
+        "get": {
+            "tags": ["/products"],
+            "summary": "搜尋商品",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/cart/:id": {
+        "post": {
+            "tags": ["/cart"],
+            "summary": "加入購物車",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        },
+        "delete": {
+            "tags": ["/cart"],
+            "summary": "移出購物車",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/cart-add-count/:id": {
+        "post": {
+            "tags": ["/cart"],
+            "summary": "增加數量",
+            "responses": {
+                "200":{
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/cart-reduce-count/:id": {
+        "post": {
+            "tags": ["/cart"],
+            "summary": "刪減數量",
+            "responses": {
+                "200":{
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/products/:id": {
+        "get": {
+            "tags": ["/products"],
+            "summary": "查詢特定商品",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/orders": {
+        "get": {
+            "tags": ["/order"],
+            "summary": "取得所有訂單",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "422": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/order": {
+        "post": {
+            "tags": ["/order"],
+            "summary": "加入訂單",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    },
+    "/order/:id": {
+        "delete": {
+            "tags": ["/order"],
+            "summary": "刪除訂單",
+            "responses": {
+                "200": {
+                    "description": "success"
+                }
+            }
+        }
+    }
+
     },
     "definitions":{
         "Users": {
-            "required": [ "name", "id", "company" ],
+            "required": [ "name", "email" , "avatar" ],
             "properties": {
                 "id": {
                     "type":"number"
                 },
-                "age": {
-                    "type":"number"
+                "email": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string",
                     "example": "chi"
                 },
-                "company": {
+                "avatar": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }
