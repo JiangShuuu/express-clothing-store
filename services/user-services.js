@@ -209,7 +209,7 @@ const userServices = {
   },
   addCart: (req, cb) => {
     return Promise.all([
-      Product.findByPk(id),
+      Product.findByPk(req.params.id),
       Cart.findOne({
         where: {
           userId: req.user.id,
@@ -232,7 +232,7 @@ const userServices = {
 
         return Cart.create({
           userId: req.user.id,
-          productId
+          productId: req.params.id
         })
       })
       .then(() => cb(null, {}))
