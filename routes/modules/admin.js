@@ -15,8 +15,8 @@ router.get('/users/:id', userController.getUser)
 router.get('/product/:id/edit', productController.editProduct)
 router.put('/product/:id', upload.single('image'), productController.putProduct)
 router.delete('/product/:id', productController.deleteProduct)
-router.get('/product/:id', productController.getProduct)
-router.get('/products', adminController.getProducts)
+router.get('/product/:id', productController.getProduct) // 考慮註銷
+router.get('/products', adminController.getProducts) // 考慮註銷
 router.post('/product', upload.single('image'), productController.postProduct)
 
 // Category

@@ -44,7 +44,7 @@
             }
         }
     },
-    "/users:id": { 
+    "/users/:id": { 
         "get": { 
             "tags":["/users"],
             "summary":"取得使用者",
@@ -191,6 +191,152 @@
                 }
             }
         }
+    },
+    "/users/id": {
+        "get": {
+            "tags": ["admin"],
+            "summary": "獲取特定使用者",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        },
+        "patch": {
+            "tags": ["admin"],
+            "summary": "修改使用者權限",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/users": {
+        "get": {
+            "tags": ["/users"],
+            "summary": "獲取所有使用者",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/product/:id": {
+        "put": {
+            "tags": ["admin"],
+            "summary": "更新商品資訊",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        },
+        "delete": {
+            "tags": ["admin"],
+            "summary": "刪除商品",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/product": {
+        "post": {
+            "tags": ["admin"],
+            "summary": "新增商品",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/categories": {
+        "get": {
+            "tags": ["admin"],
+            "summary": "獲取所有類別",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        },
+        "post": {
+            "tags": ["admin"],
+            "summary": "新增類別",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+
+    },
+    "/categories/:id": {
+        "get": {
+            "tags": ["admin"],
+            "summary": "獲取類別",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        },
+        "put": {
+            "tags": ["admin"],
+            "summary": "更新類別",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        },
+        "delete": {
+            "tags": ["admin"],
+            "summary": "刪除類別",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+
     }
 
     },
