@@ -17,8 +17,8 @@
 - 管理者能瀏覽用戶
 
 ## 環境
-### 框架
-- node + express
+### 使用技術
+- node + express + MySQL
 ### 部署
 - Oracle + Docker 部署
 
