@@ -4,7 +4,7 @@
 
 [後端入口DEMO](https://express.jiangshuuu.com/)  
 [專案成品DEMO](https://profile.jiangshuuu.com/)  
-[API 文件](https://xxxx.com)
+[API 文件](https://express.jiangshuuu.com/api-docs)
 
 ## 產品功能
 - 訪客能創建/登入帳戶(含第三方登入)
