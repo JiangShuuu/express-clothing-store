@@ -60,7 +60,7 @@ const userServices = {
   getCurrentUser: async (req, cb) => {
     try {
       const userId = req.user.id
-      const { CartProducts, email, id, isAdmin, name } = await User.findByPk(userId, {
+      const { CartProducts, email, id, isAdmin, name, avatar } = await User.findByPk(userId, {
         include: [
           { model: Product, as: 'CartProducts' }
         ],
@@ -68,10 +68,11 @@ const userServices = {
           'id',
           'name',
           'email',
+          'avatar',
           'isAdmin'
         ],
       })
-      const userData = { email, id, isAdmin, name }
+      const userData = { email, id, isAdmin, name, avatar }
       cb(null, {user: { userData, CartProducts }})
     } catch (error) {
       error.code = 500
