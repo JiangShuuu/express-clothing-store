@@ -387,7 +387,6 @@ const userServices = {
   },
   deleteOrder: (req, cb) => {
     const { id } = req.params
-    console.log('123', id)
     return Promise.all([
       Order.findOne({
         where: {

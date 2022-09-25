@@ -15,7 +15,6 @@ router.post('/third-party-login', ((req, res) => {
       ]
     })
       .then(user => {
-        console.log(user)
         if (user) {
           const userData = user.toJSON()
           const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
