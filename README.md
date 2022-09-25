@@ -20,7 +20,7 @@
 ### 使用技術
 - node + express + MySQL
 ### 部署
-- Oracle + Docker + githubAction
+- Oracle + Docker + GithubAction
 
 ## 安裝流程
 此安裝流程為本地端(local)使用。
