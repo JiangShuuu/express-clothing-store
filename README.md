@@ -1,6 +1,6 @@
 # Clothes Store API
 
-本專案為前後分離協作，此API提供給 [clothingStore](https://github.com/JiangShuuu/vue3-clothingStore-ts) 使用。
+本專案為全端作品，此API提供給 [clothingStore](https://github.com/JiangShuuu/vue3-clothingStore-ts) 使用。
 
 [後端入口DEMO](https://express.jiangshuuu.com/)  
 [專案成品DEMO](https://profile.jiangshuuu.com/)  
@@ -12,7 +12,7 @@
 - 訪客能分享連結
 - 會員能將商品加入購物車
 - 會員能新增/刪除訂單
-- 管理者能新增/刪除/修改商品、類別
+- 管理者能新增/刪除/修改商品、類別、User
 - 管理者能管理訂單
 - 管理者能瀏覽用戶
 
