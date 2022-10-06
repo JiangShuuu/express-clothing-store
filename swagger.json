@@ -9,7 +9,7 @@
       "url": "https://profile.jiangshuuu.com"
     }
   },
-  "host": "localhost:8888",
+  "host": "https://express.jiangshuuu.com",
   "basePath": "/",
   "schemes": ["http"],
   "consumes": ["application/json"],
