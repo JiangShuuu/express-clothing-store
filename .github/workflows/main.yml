@@ -10,14 +10,13 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
       - name: Use Node.js Install
+        uses: actions/checkout@v3
         uses: actions/setup-node@v3
         with:
           node-version: 14
-
-      - run: npm install
+          cache: 'npm'
+      - run: npm ci
         
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
