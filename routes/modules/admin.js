@@ -29,4 +29,7 @@ router.post('/categories', adminController.postCategory)
 // Comment
 router.delete('/comments/:id', commentController.deleteComment)
 
+// Order
+router.get('/orders', adminController.getOrders)
+
 module.exports = router

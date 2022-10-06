@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User, Category, Product } = db
+const { User, Category, Product, Order } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const error = new Error()
 
@@ -153,6 +153,29 @@ const adminServices = {
         error.code = 500
         cb(err)
       })
+  },
+
+  // Order
+  getOrders: (req, cb) => {
+    return Order.findAll({ 
+        include: [
+          { model: Product, as: 'OrderProducts' }
+        ]
+      })
+        .then((orders) => {
+          console.log(orders)
+          if (!orders) {
+            error.code = 400
+            error.message = "訂單不存在!"
+            return cb(error)
+          }
+
+          cb(null, { orders })
+        })
+        .catch(error => {
+          error.code = 500
+          cb(error)
+        })
   }
 }
 

@@ -27,6 +27,11 @@ const adminController = {
   getProducts: (req, res, next) => {
     adminServices.getProducts(req, (err, data) => err ? next(err) : res.json({ status: 'success getAll', data }))
   },
+
+  // Orders
+  getOrders: (req, res, next) => {
+    adminServices.getOrders(req, (err, data) => err ? next(err) : res.json({status: 'success getAll', data}))
+  }
 }
 
 module.exports = adminController
