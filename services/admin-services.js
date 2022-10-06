@@ -159,7 +159,8 @@ const adminServices = {
   getOrders: (req, cb) => {
     return Order.findAll({ 
         include: [
-          { model: Product, as: 'OrderProducts' }
+          { model: User, attributes: ['id', 'name', 'email']},
+          { model: Product, as: 'OrderProducts', attributes: ['id', 'title', 'price', 'og_price', 'image'] }
         ]
       })
         .then((orders) => {
