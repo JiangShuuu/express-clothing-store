@@ -192,22 +192,10 @@
             }
         }
     },
-    "/users/id": {
+    "/admin/orders": {
         "get": {
             "tags": ["admin"],
-            "summary": "獲取特定使用者",
-            "responses": {
-                "200": {
-                    "description": "success"
-                },
-                "403": {
-                    "description": "權限不足"
-                }
-            }
-        },
-        "patch": {
-            "tags": ["admin"],
-            "summary": "修改使用者權限",
+            "summary": "獲取所有訂單",
             "responses": {
                 "200": {
                     "description": "success"
@@ -218,21 +206,7 @@
             }
         }
     },
-    "/users": {
-        "get": {
-            "tags": ["/users"],
-            "summary": "獲取所有使用者",
-            "responses": {
-                "200": {
-                    "description": "success"
-                },
-                "403": {
-                    "description": "權限不足"
-                }
-            }
-        }
-    },
-    "/product/:id": {
+    "/admin/product/:id": {
         "put": {
             "tags": ["admin"],
             "summary": "更新商品資訊",
@@ -258,7 +232,7 @@
             }
         }
     },
-    "/product": {
+    "/admin/product": {
         "post": {
             "tags": ["admin"],
             "summary": "新增商品",
@@ -272,7 +246,7 @@
             }
         }
     },
-    "/categories": {
+    "/admin/categories": {
         "get": {
             "tags": ["admin"],
             "summary": "獲取所有類別",
@@ -299,10 +273,10 @@
         }
 
     },
-    "/categories/:id": {
+    "/admin/categories/:id": {
         "get": {
             "tags": ["admin"],
-            "summary": "獲取類別",
+            "summary": "獲取特定類別",
             "responses": {
                 "200": {
                     "description": "success"
