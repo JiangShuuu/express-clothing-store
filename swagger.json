@@ -159,7 +159,7 @@
     "/orders": {
         "get": {
             "tags": ["/order"],
-            "summary": "取得所有訂單",
+            "summary": "取得該使用者所有訂單",
             "responses": {
                 "200": {
                     "description": "success"
@@ -184,7 +184,7 @@
     "/order/:id": {
         "delete": {
             "tags": ["/order"],
-            "summary": "刪除訂單",
+            "summary": "刪除自己的訂單",
             "responses": {
                 "200": {
                     "description": "success"
@@ -196,6 +196,20 @@
         "get": {
             "tags": ["admin"],
             "summary": "獲取所有訂單",
+            "responses": {
+                "200": {
+                    "description": "success"
+                },
+                "403": {
+                    "description": "權限不足"
+                }
+            }
+        }
+    },
+    "/admin/orders/:id": {
+        "delete": {
+            "tags": ["admin"],
+            "summary": "刪除指定訂單",
             "responses": {
                 "200": {
                     "description": "success"

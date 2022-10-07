@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User, Category, Product, Order } = db
+const { User, Category, Product, Order, Orderlist } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const error = new Error()
 
@@ -177,6 +177,35 @@ const adminServices = {
           error.code = 500
           cb(error)
         })
+  },
+  deleteOrder: (req, cb) => {
+    const { id } = req.params
+    return Promise.all([
+      Order.findByPk(req.params.id),
+      Orderlist.findAll({
+        where: {
+          orderId: id
+        }
+      })
+    ])
+      .then(([order, orderlist]) => {
+
+        if (!order || !orderlist) {
+          error.code = 400
+          error.message = "訂單不存在!"
+          return cb(error)
+        }
+
+        order.destroy()
+        orderlist.map(item => {
+          item.destroy()
+        })
+      })
+      .then(() => cb(null))
+      .catch((error) => {
+        error.code = 500
+        cb(error)
+      })
   }
 }
 

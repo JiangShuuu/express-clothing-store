@@ -31,5 +31,6 @@ router.delete('/comments/:id', commentController.deleteComment)
 
 // Order
 router.get('/orders', adminController.getOrders)
+router.delete('/orders/:id', adminController.deleteOrder)
 
 module.exports = router

@@ -31,6 +31,9 @@ const adminController = {
   // Orders
   getOrders: (req, res, next) => {
     adminServices.getOrders(req, (err, data) => err ? next(err) : res.json({status: 'success getAll', data}))
+  },
+  deleteOrder: (req, res, next) => {
+    adminServices.deleteOrder(req, err => err ? next(err): res.json({ status: 'seccess delete' }))
   }
 }
 
