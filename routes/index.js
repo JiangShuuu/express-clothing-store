@@ -53,7 +53,8 @@ router.post('/order', authenticated, userController.addOrder)
 router.delete('/order/:id', authenticated, userController.deleteOrder)
 
 // payment
-router.post("/payment", authenticated, paymentController.payment);
+router.get("/payment", authenticated, paymentController.payment);
+router.post("/notify", authenticated, paymentController.notify);
 
 router.use('/', apiErrorHandler)
 
