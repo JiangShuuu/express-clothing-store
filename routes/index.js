@@ -6,6 +6,7 @@ const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin, authIsUser } = require('../middleware/api-auth') 
 const productController = require('../controllers/product-controller')
 const commentController = require('../controllers/comment-controller')
+const paymentController = require('../controllers/payment-controller')
 const admin = require('./modules/admin')
 const auth = require('./modules/auth')
 const upload = require('../middleware/multer')
@@ -50,6 +51,9 @@ router.post('/cart-reduce-count/:id', authenticated, userController.reduceCount)
 router.get('/orders', authenticated, userController.getOrders)
 router.post('/order', authenticated, userController.addOrder)
 router.delete('/order/:id', authenticated, userController.deleteOrder)
+
+// payment
+router.post("/payment", authenticated, paymentController.payment);
 
 router.use('/', apiErrorHandler)
 
