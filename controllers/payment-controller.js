@@ -44,7 +44,6 @@ const options = {
 
 const paymentController = {
   payment: (req, res, next) => {
-    console.log('req', req.body)
     const ecpay = new ecpay_payment(options);
     let base_param = {
       MerchantTradeNo: generateRandomCode(), //請帶20碼uid, ex: f0a0d7e9fae1bb72bc93
@@ -53,7 +52,7 @@ const paymentController = {
       TradeDesc: "測試交易描述1",
       ItemName: "測試商品等",
       ReturnURL: "https://0707-60-251-45-137.ngrok-free.app/notify",
-      ClientBackURL: "https://www.google.com",
+      ClientBackURL: "http://localhost:3000",
       // ChooseSubPayment: '',
       // OrderResultURL: 'http://192.168.0.1/payment_result',
       // NeedExtraPaidInfo: '1',
@@ -66,18 +65,19 @@ const paymentController = {
       // CustomField2: '',
       // CustomField3: '',
       // CustomField4: ''
-    };
+    }
     
     let inv_params = {}
+    
     const paymentForm = ecpay.payment_client.aio_check_out_credit_onetime(
       (parameters = base_param),
       (invoice = inv_params)
-    );
+    )
     // const decodedForm = decodeURIComponent(paymentForm);
     res.send(paymentForm);
   },
   notify: (req, res, next) => {
-    console.log('PAYMENTPAYMENTPAYMENTPAYMENTPAYMENT')
+    console.log('PAYMEN2TPAYMENTPAY2MENT2PAYMENTPA2YMENT')
     paymentServices.notify(req, (err, data) =>
       err ? next(err) : res.json({ status: "success payment", data })
     );

@@ -10,9 +10,7 @@ const ecpayConfig = {
 
 const paymentServices = {
   payment: (req, cb) => {
-    console.log("ecpay_payment", ecpay_payment);
     const ecpay = new ecpay_payment();
-    console.log("getecpay", ecpay);
 
     // 設定付款資訊
     const orderParams = {
