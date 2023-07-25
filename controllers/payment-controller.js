@@ -52,7 +52,7 @@ const paymentController = {
       TradeDesc: "測試交易描述1",
       ItemName: "測試商品等",
       ReturnURL: "https://0707-60-251-45-137.ngrok-free.app/notify",
-      ClientBackURL: "http://localhost:3000",
+      ClientBackURL: "http://localhost:3000/cart/confirm",
       // ChooseSubPayment: '',
       // OrderResultURL: 'http://192.168.0.1/payment_result',
       // NeedExtraPaidInfo: '1',
@@ -77,10 +77,8 @@ const paymentController = {
     res.send(paymentForm);
   },
   notify: (req, res, next) => {
-    console.log('PAYMEN2TPAYMENTPAY2MENT2PAYMENTPA2YMENT')
-    paymentServices.notify(req, (err, data) =>
-      err ? next(err) : res.json({ status: "success payment", data })
-    );
+    console.log("Payment notification received:", req.body);
+    res.redirect('/4044')
   }
 };
 
