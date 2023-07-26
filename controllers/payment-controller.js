@@ -54,7 +54,7 @@ const paymentController = {
       TotalAmount: `${total}`,
       TradeDesc: "測試交易描述1",
       ItemName: "測試商品等",
-      ReturnURL: "https://e771-122-100-73-148.ngrok-free.app/notify",
+      ReturnURL: "https://e180-122-100-73-148.ngrok-free.app/notify",
       ClientBackURL: "http://localhost:3000/cart/confirm",
       // ChooseSubPayment: '',
       // OrderResultURL: 'http://192.168.0.1/payment_result',
@@ -81,44 +81,62 @@ const paymentController = {
   },
   notify: (req, res, next) => {
     console.log("Payment notification received:", req.body);
-    const { CustomField1, CustomField2, CustomField3, CustomField4, TradeAmt } =
-      req.body;
-    const userId = +CustomField4;
-    Cart.findAll({
-      where: {
-        userId,
-      },
-    })
-      .then((cart) => {
-        if (cart.length < 1) {
-          error.code = 400;
-          error.message = "購物車沒有任何商品!";
-          return next(error);
-        }
 
-        Order.create({
-          name: CustomField1,
-          phone: CustomField2,
-          address: CustomField3,
-          total: TradeAmt,
-          userId,
-        }).then((order) => {
-          cart.map((item) => {
-            Orderlist.create({
-              orderId: order.id,
-              productId: item.productId,
-              productCount: item.productCount,
-            });
-            item.destroy();
-          });
-        });
-      })
-      .then(() => res.json({ status: 200, msg: "成功新增訂單" }))
-      .catch((error) => {
-        error.code = 500;
-        next(error);
-      });
+    const {
+      CustomField1,
+      CustomField2,
+      CustomField3,
+      CustomField4,
+      TradeAmt,
+    } = req.body;
+
+    const userInfo = {
+      name: CustomField1,
+      phone: CustomField2,
+      address: CustomField3,
+      userId: +CustomField4,
+      total: TradeAmt,
+    };
+
+    updateUserCart(userInfo, res, next);
   }
 };
+
+function updateUserCart (userInfo, res, next) {
+  Cart.findAll({
+    where: {
+      userId: userInfo.userId,
+    },
+  })
+    .then((cart) => {
+      if (cart.length < 1) {
+        error.code = 400;
+        error.message = "購物車沒有任何商品!";
+        return next(error);
+      }
+
+      Order.create({
+        name: userInfo.name,
+        phone: userInfo.phone,
+        address: userInfo.address,
+        total: userInfo.total,
+        userId: userInfo.userId,
+      }).then((order) => {
+        cart.map((item) => {
+          Orderlist.create({
+            orderId: order.id,
+            productId: item.productId,
+            productCount: item.productCount,
+          });
+          item.destroy();
+        });
+      });
+    })
+    .then(() => res.json({ status: 200, msg: "成功新增訂單" }))
+    .catch((error) => {
+      error.code = 500;
+      next(error);
+    });
+}
 
 module.exports = paymentController;
