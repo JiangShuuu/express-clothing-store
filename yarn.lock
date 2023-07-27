@@ -542,6 +542,15 @@
     "elementtree" "^0.1.7"
     "iconv-lite" "^0.4.18"
 
+"ecpay_logistics_nodejs@^1.0.2":
+  "integrity" "sha512-rzN8khFjLcfp2IYs8bi+4NifP8hS99BdbB2ryXJVFaroBGusjuJIMXwOobMOvrntxkNqNVtKyf5/n84QlaAh4g=="
+  "resolved" "https://registry.npmjs.org/ecpay_logistics_nodejs/-/ecpay_logistics_nodejs-1.0.2.tgz"
+  "version" "1.0.2"
+  dependencies:
+    "buffer" "^5.0.6"
+    "elementtree" "^0.1.7"
+    "iconv-lite" "^0.4.18"
+
 "editorconfig@^0.15.3":
   "integrity" "sha512-M9wIMFx96vq0R4F+gRpY3o2exzb8hEj/n9S8unZtHSvYjibBp/iMufSzvmOcV/laG0ZtuTVGtiJggPOSW2r93g=="
   "resolved" "https://registry.npmjs.org/editorconfig/-/editorconfig-0.15.3.tgz"

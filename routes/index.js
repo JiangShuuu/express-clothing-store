@@ -55,6 +55,11 @@ router.delete('/order/:id', authenticated, userController.deleteOrder)
 // payment
 router.post("/payment", authenticated, paymentController.payment);
 router.post("/notify", paymentController.notify);
+router.post("/receiverReply", paymentController.receiverServerReply);
+
+// logistics
+router.post("/print", paymentController.printReceive)
+router.post("/getmap", paymentController.getmap);
 
 router.use('/', apiErrorHandler)
 
